@@ -8,7 +8,11 @@ class ResponseData {
   ResponseData.fromJson(Map<String, dynamic> json) {
     resultCode = json['resultCode'];
     resultMessage = json['resultMessage'];
-    body = json['body'];
+    if (json['body'] == null) {
+      body = <String, dynamic>{};
+    } else {
+      body = json['body'];
+    }
   }
 
   Map<String, dynamic> toJson() {
