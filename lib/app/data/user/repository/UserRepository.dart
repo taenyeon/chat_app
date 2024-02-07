@@ -1,11 +1,13 @@
+import 'package:chat_app/app/data/token/model/Token.dart';
+import 'package:chat_app/app/data/user/model/User.dart';
+
 import '../provider/UserApi.dart';
 
 class UserRepository {
-  final UserApi userApi;
+  final UserApi userApi = UserApi();
 
-  UserRepository({required this.userApi});
+  Future<Token?> login(username, password) async =>
+      await userApi.login(username, password);
 
-  login(username, password) async => userApi.login(username, password);
-
-  getUserInfo() async => userApi.getUserInfo();
+  Future<User?> getUserInfo() async => await userApi.getUserInfo();
 }

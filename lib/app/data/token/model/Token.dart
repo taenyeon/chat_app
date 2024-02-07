@@ -9,11 +9,8 @@ class Token {
     refreshToken = json['refreshToken'];
   }
 
-  Map<String, dynamic> toJson(){
-    var data = <String, dynamic>{};
-    data['accessToken'] = accessToken;
-    data['refreshToken'] = refreshToken;
-    return data;
-  }
-
+  toJson() => <String, dynamic>{
+        "accessToken": accessToken,
+        'refreshToken': refreshToken,
+      };
 }
