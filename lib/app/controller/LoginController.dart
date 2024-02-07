@@ -40,8 +40,8 @@ class LoginController extends GetxController {
         usernameController.text, passwordController.text);
     if (token != null) {
       await tokenRepository.saveTokens(token.accessToken, token.refreshToken);
-      User? user = await userRepository.getUserInfo();
-      log.info("user : $user");
+      User user = await userRepository.getUserInfo();
+      userRepository.setUser(user);
     }
   }
 }
