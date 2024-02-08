@@ -1,15 +1,18 @@
-import 'package:chat_app/app/util/log/LoggingUtil.dart';
+import 'package:chat_app/app/util/log/logging_util.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:chat_app/app/route/Route.dart';
+import 'package:chat_app/app/route/route.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 
 void main() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
-    print(
-        '✈️ ${record.time} - ${LoggingUtil.getLogLevel(record.level)} [SEQ : ${record.sequenceNumber}] \x1B[34m${record.loggerName}\x1B[0m : ${record.message}');
+    if (kDebugMode) {
+      print(
+          '✈️ ${record.time} - ${LoggingUtil.getLogLevel(record.level)} [SEQ : ${record.sequenceNumber}] \x1B[34m${record.loggerName}\x1B[0m : ${record.message}');
+    }
   });
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());

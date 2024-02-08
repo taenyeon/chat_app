@@ -1,12 +1,10 @@
-import 'dart:developer';
-
-import 'package:chat_app/app/controller/LoginController.dart';
-import 'package:chat_app/app/route/Route.dart';
+import 'package:chat_app/app/controller/login_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = Get.put(LoginController());

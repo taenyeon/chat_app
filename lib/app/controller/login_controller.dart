@@ -1,7 +1,7 @@
-import 'package:chat_app/app/data/token/model/Token.dart';
-import 'package:chat_app/app/data/token/repository/TokenRepository.dart';
-import 'package:chat_app/app/data/user/model/User.dart';
-import 'package:chat_app/app/data/user/repository/UserRepository.dart';
+import 'package:chat_app/app/data/token/model/token.dart';
+import 'package:chat_app/app/data/token/repository/token_repository.dart';
+import 'package:chat_app/app/data/user/model/user.dart';
+import 'package:chat_app/app/data/user/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';

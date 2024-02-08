@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:chat_app/app/data/token/repository/TokenRepository.dart';
-import 'package:chat_app/app/data/user/repository/UserRepository.dart';
-import 'package:chat_app/app/util/log/LoggingUtil.dart';
+import 'package:chat_app/app/data/token/repository/token_repository.dart';
+import 'package:chat_app/app/data/user/repository/user_repository.dart';
+import 'package:chat_app/app/util/log/logging_util.dart';
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 

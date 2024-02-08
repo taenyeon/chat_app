@@ -1,8 +1,8 @@
-import 'package:chat_app/app/data/user/repository/UserRepository.dart';
+import 'package:chat_app/app/data/user/repository/user_repository.dart';
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';
 
-import '../data/user/model/User.dart';
+import '../data/user/model/user.dart';
 
 class MainController extends GetxController {
   late Logger log;
@@ -16,11 +16,6 @@ class MainController extends GetxController {
     log = Logger("MainController");
     userRepository = UserRepository();
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   void loadUser() async {

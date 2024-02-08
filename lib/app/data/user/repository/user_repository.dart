@@ -1,10 +1,8 @@
-import 'package:chat_app/app/data/token/model/Token.dart';
-import 'package:chat_app/app/data/token/repository/TokenRepository.dart';
-import 'package:chat_app/app/data/user/model/User.dart';
-import 'package:chat_app/app/util/storage/Storage.dart';
-import 'package:get/get.dart';
+import 'package:chat_app/app/data/token/model/token.dart';
+import 'package:chat_app/app/data/token/repository/token_repository.dart';
+import 'package:chat_app/app/data/user/model/user.dart';
 
-import '../provider/UserApi.dart';
+import '../provider/user_api.dart';
 
 class UserRepository {
   final UserApi userApi = UserApi();

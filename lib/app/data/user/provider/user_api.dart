@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:chat_app/app/util/response/Response.dart';
-import 'package:chat_app/app/data/token/model/Token.dart';
-import 'package:chat_app/app/data/user/model/User.dart';
+import 'package:chat_app/app/util/response/response.dart';
+import 'package:chat_app/app/data/token/model/token.dart';
+import 'package:chat_app/app/data/user/model/user.dart';
 import 'package:chat_app/app/util/api/base_api.dart';
 import 'package:dio/src/dio.dart';
 import 'package:get/get.dart';
