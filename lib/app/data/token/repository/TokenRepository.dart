@@ -31,7 +31,7 @@ class TokenRepository {
     await saveRefreshToken(refreshToken);
   }
 
-  deleteTokens() async {
+  dropTokens() async {
     await dropAccessToken();
     await dropRefreshToken();
   }

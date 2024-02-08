@@ -8,19 +8,13 @@ import '../provider/UserApi.dart';
 
 class UserRepository {
   final UserApi userApi = UserApi();
-
-  RxBool isLogin = false.obs;
-  late Rx<User> user = User().obs;
-
+  final TokenRepository tokenRepository = TokenRepository();
   Future<Token?> login(username, password) async =>
       await userApi.login(username, password);
 
-  Future<User> getUserInfo() async => await userApi.getUserInfo();
-
-  setUser(User user) {
-    this.user.value = user;
-    isLogin.value = true;
+  logout() async {
+    await tokenRepository.dropTokens();
   }
 
-  loadUser() {}
+  Future<User> getUserInfo() async => await userApi.getUserInfo();
 }

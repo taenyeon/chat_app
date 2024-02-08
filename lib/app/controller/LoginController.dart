@@ -13,6 +13,9 @@ class LoginController extends GetxController {
   late UserRepository userRepository;
   late TokenRepository tokenRepository;
 
+  RxBool isLogin = false.obs;
+  late Rx<User> user = User().obs;
+
   @override
   void onInit() {
     log = Logger("LoginController");
@@ -40,8 +43,7 @@ class LoginController extends GetxController {
         usernameController.text, passwordController.text);
     if (token != null) {
       await tokenRepository.saveTokens(token.accessToken, token.refreshToken);
-      User user = await userRepository.getUserInfo();
-      userRepository.setUser(user);
+      Get.offAllNamed("/");
     }
   }
 }

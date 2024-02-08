@@ -38,8 +38,4 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-
-  void login() {
-    Get.snackbar("login", "press");
-  }
 }

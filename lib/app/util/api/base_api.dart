@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:chat_app/app/data/token/repository/TokenRepository.dart';
+import 'package:chat_app/app/data/user/repository/UserRepository.dart';
 import 'package:chat_app/app/util/log/LoggingUtil.dart';
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 
 Future<Dio> baseApi() async {
   var api = Dio();
-  var tokenRepository = TokenRepository();
+  TokenRepository tokenRepository = TokenRepository();
+  UserRepository userRepository = UserRepository();
   Logger log = LoggingUtil.logger("🚀API");
 
   // options
@@ -27,7 +29,7 @@ Future<Dio> baseApi() async {
   }, onError: (error, handler) async {
     var statusCode = error.response?.statusCode;
     if (statusCode == 401 || statusCode == 403) {
-      return await retry(tokenRepository, error, api, handler);
+      return await retry(tokenRepository, userRepository, error, api, handler);
     } else {
       return handler.next(error);
     }
@@ -41,8 +43,8 @@ Future<Dio> baseApi() async {
   return api;
 }
 
-retry(TokenRepository tokenRepository, DioException error, Dio api,
-    ErrorInterceptorHandler handler) async {
+retry(TokenRepository tokenRepository, UserRepository userRepository,
+    DioException error, Dio api, ErrorInterceptorHandler handler) async {
   var refreshToken = await tokenRepository.getRefreshToken();
   var accessToken = await tokenRepository.getAccessToken();
 
@@ -52,8 +54,9 @@ retry(TokenRepository tokenRepository, DioException error, Dio api,
 
   refreshApi.interceptors
       .add(InterceptorsWrapper(onError: (error, handler) async {
-    if (error.response?.statusCode == 401) {
-      await tokenRepository.deleteTokens();
+    var statusCode = error.response?.statusCode;
+    if (statusCode == 401 || statusCode == 403) {
+      await tokenRepository.dropTokens();
       // 로그인으로 이동
       return handler.next(error);
     }
