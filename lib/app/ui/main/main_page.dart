@@ -26,7 +26,7 @@ class MainPage extends StatelessWidget {
               return Column(
                 children: [
                   Center(
-                    child: Text("USER : ${mainController.user.value}"),
+                    child: Text("USER : ${mainController.user.value.toJson()}"),
                   ),
                   Center(
                     child: ElevatedButton(

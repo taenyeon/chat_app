@@ -10,8 +10,13 @@ void main() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     if (kDebugMode) {
-      print(
-          '✈️ ${record.time} - ${LoggingUtil.getLogLevel(record.level)} [SEQ : ${record.sequenceNumber}] \x1B[34m${record.loggerName}\x1B[0m : ${record.message}');
+      print('✈️ ${record.time}'
+          ' - '
+          '${LoggingUtil.getLogLevel(record.level)} '
+          '[SEQ : ${record.sequenceNumber}] '
+          '\x1B[34m${record.loggerName}\x1B[0m'
+          ' : '
+          '${record.message}');
     }
   });
   WidgetsFlutterBinding.ensureInitialized();
