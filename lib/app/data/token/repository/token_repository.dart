@@ -1,6 +1,8 @@
 import 'package:chat_app/app/util/storage/storage.dart';
+import 'package:logging/logging.dart';
 
 class TokenRepository {
+  Logger log = Logger("TokenRepository");
   static const accessTokenKey = "accessToken";
   static const refreshTokenkey = "refreshToken";
   var secureStorage = Storage.secureStorage;
