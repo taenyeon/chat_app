@@ -49,7 +49,7 @@ class MainPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  )
                 ],
               );
             } else {
