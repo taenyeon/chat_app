@@ -34,11 +34,6 @@ class LoginController extends GetxController {
   }
 
   void login() async {
-    Get.dialog(
-        const Center(
-          child: CircularProgressIndicator(),
-        ),
-        barrierDismissible: false);
     Token? token = await userRepository.login(
         usernameController.text, passwordController.text);
     if (token != null) {
