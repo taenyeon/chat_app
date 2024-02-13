@@ -1,4 +1,5 @@
 import 'package:chat_app/app/controller/main_controller.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,12 @@ class MainPage extends StatelessWidget {
         children: [
           GetX<MainController>(builder: (MainController controller) {
             return Center(
-              child: Text("isLogin : ${mainController.isLogin.value}"),
+              child: Text(
+                "isLogin : ${mainController.isLogin.value}",
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             );
           }),
           GetX<MainController>(builder: (MainController controller) {
@@ -26,14 +32,24 @@ class MainPage extends StatelessWidget {
               return Column(
                 children: [
                   Center(
-                    child: Text("USER : ${mainController.user.value.toJson()}"),
+                    child: Text(
+                      "USER : ${mainController.user.value.toJson()}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                   Center(
                     child: ElevatedButton(
                       onPressed: () => mainController.logout(),
-                      child: const Text("LOGOUT"),
+                      child: const Text(
+                        "LOGOUT",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               );
             } else {
@@ -41,8 +57,16 @@ class MainPage extends StatelessWidget {
                 children: [
                   Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.limeAccent,
+                      ),
                       onPressed: () => Get.offAllNamed("/login"),
-                      child: const Text("LOGIN"),
+                      child: const Text(
+                        "LOGIN",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   )
                 ],

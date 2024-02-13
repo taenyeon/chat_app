@@ -24,6 +24,7 @@ class LoginInterface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     final LoginController loginController = Get.put(LoginController());
     return Container(
       decoration: BoxDecoration(
@@ -51,8 +52,8 @@ class LoginInterface extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(5.0),
                   child: SizedBox(
-                    width: 200,
-                    height: 50,
+                    width: size.width * 0.2,
+                    height: size.height * 0.05,
                     child: TextFormField(
                       style: const TextStyle(
                         color: Colors.white,
@@ -79,8 +80,8 @@ class LoginInterface extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(5.0),
                   child: SizedBox(
-                    width: 200,
-                    height: 50,
+                    width: size.width * 0.2,
+                    height: size.height * 0.05,
                     child: TextFormField(
                       style: const TextStyle(
                         color: Colors.white,
@@ -102,10 +103,10 @@ class LoginInterface extends StatelessWidget {
                 ),
               ),
               Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(5.0),
                   child: SizedBox(
-                    width: 200,
-                    height: 50,
+                    width: size.width * 0.2,
+                    height: size.height * 0.04,
                     child: ElevatedButton(
                       onPressed: () => loginController.login(),
                       style: ElevatedButton.styleFrom(
@@ -113,7 +114,9 @@ class LoginInterface extends StatelessWidget {
                       ),
                       child: const Text(
                         'LOGIN',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   )),

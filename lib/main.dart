@@ -1,4 +1,4 @@
-import 'package:chat_app/app/util/chat_client.dart';
+import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/log/logging_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
