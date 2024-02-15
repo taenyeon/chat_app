@@ -1,5 +1,6 @@
 import 'package:chat_app/app/ui/Login/login_page.dart';
 import 'package:chat_app/app/ui/main/main_page.dart';
+import 'package:chat_app/app/ui/main/main_test_page.dart';
 import 'package:get/get.dart';
 
 abstract class Route {
@@ -16,6 +17,10 @@ class AppPages {
     GetPage(
       name: "/login",
       page: () => const LoginPage(),
-    )
+    ),
+    GetPage(
+      name: "/mainTest",
+      page: () => const MainTestPage(),
+    ),
   ];
 }

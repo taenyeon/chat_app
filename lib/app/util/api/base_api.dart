@@ -2,6 +2,7 @@ import 'package:chat_app/app/data/token/repository/token_repository.dart';
 import 'package:chat_app/app/data/user/repository/user_repository.dart';
 import 'package:chat_app/app/util/log/logging_util.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:logging/logging.dart';
 
 Future<Dio> baseApi() async {
@@ -11,33 +12,50 @@ Future<Dio> baseApi() async {
   Logger log = LoggingUtil.logger("🚀API");
 
   // options
-  api.options.baseUrl = 'http://localhost:8080/api';
+  api.options.baseUrl = 'http://127.0.0.1:8001/api';
   // interceptors
   api.interceptors.clear();
-  api.interceptors.add(InterceptorsWrapper(onRequest: (option, handler) async {
-    var accessToken = await tokenRepository.getAccessToken();
-    option.headers['access_token'] = accessToken;
-    log.info("\n[\x1B[34mREQUEST\x1B[0m]\n\n"
-        "method : ${option.method}\n"
-        "url : ${option.uri}\n\n"
-        "headers : \n${LoggingUtil.getPrettyString(option.headers)}\n"
-        "queryParams : ${option.queryParameters}\n\n"
-        "extra : ${option.extra}\n\n");
-    return handler.next(option);
-  }, onError: (error, handler) async {
-    var statusCode = error.response?.statusCode;
-    if (statusCode == 401 || statusCode == 403) {
-      return await retry(tokenRepository, userRepository, error, api, handler);
-    } else {
-      return handler.next(error);
-    }
-  }, onResponse: (response, handler) {
-    log.info("\n[\x1B[31mRESPONSE\x1B[0m]\n\n"
-        "url : ${response.realUri}\n\n"
-        "headers :\n${response.headers}\n"
-        "body : ${LoggingUtil.getPrettyJson(response.data)}\n\n");
-    return handler.resolve(response);
-  }));
+  api.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (option, handler) async {
+        // ACCESS_TOKEN SETTING
+        var accessToken = await tokenRepository.getAccessToken();
+        if (accessToken != null) {
+          option.headers['access_token'] = accessToken;
+        }
+        // REQUEST LOG
+        log.info("\n[\x1B[34mREQUEST\x1B[0m]\n\n"
+            "method : ${option.method}\n"
+            "url : ${option.uri}\n\n"
+            "headers : \n${LoggingUtil.getPrettyString(option.headers)}\n"
+            "queryParams : ${option.queryParameters}\n\n"
+            "extra : ${option.extra}\n\n");
+        // RETURN
+        return handler.next(option);
+      },
+      onError: (error, handler) async {
+        var statusCode = error.response?.statusCode;
+        log.info(
+            "[DIO ERROR] - statusCode : $statusCode, message : ${error.message}");
+        if (statusCode == 401 || statusCode == 403) {
+          return await retry(
+              tokenRepository, userRepository, error, api, handler);
+        } else {
+          return handler.next(error);
+        }
+      },
+      // RESPONSE
+      onResponse: (response, handler) {
+        // RESPONSE LOG
+        log.info("\n[\x1B[31mRESPONSE\x1B[0m]\n\n"
+            "url : ${response.realUri}\n\n"
+            "headers :\n${response.headers}\n"
+            "body : ${LoggingUtil.getPrettyJson(response.data)}\n\n");
+        // RETURN
+        return handler.resolve(response);
+      },
+    ),
+  );
   return api;
 }
 
@@ -56,6 +74,7 @@ retry(TokenRepository tokenRepository, UserRepository userRepository,
     if (statusCode == 401 || statusCode == 403) {
       await tokenRepository.dropTokens();
       // 로그인으로 이동
+      Get.offAllNamed("/login");
       return handler.next(error);
     }
   }));

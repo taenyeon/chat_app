@@ -41,6 +41,20 @@ class MainPage extends StatelessWidget {
                   ),
                   Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.limeAccent,
+                      ),
+                      onPressed: () => Get.toNamed("/mainTest"),
+                      child: const Text(
+                        "MAIN TEST",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: ElevatedButton(
                       onPressed: () => mainController.logout(),
                       child: const Text(
                         "LOGOUT",
