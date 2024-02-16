@@ -38,7 +38,7 @@ class LoginController extends GetxController {
         usernameController.text, passwordController.text);
     if (token != null) {
       await tokenRepository.saveTokens(token.accessToken, token.refreshToken);
-      Get.offAllNamed("/");
+      await Get.offAllNamed("/");
     }
   }
 }

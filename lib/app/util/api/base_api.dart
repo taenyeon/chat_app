@@ -38,6 +38,7 @@ Future<Dio> baseApi() async {
         log.info(
             "[DIO ERROR] - statusCode : $statusCode, message : ${error.message}");
         if (statusCode == 401 || statusCode == 403) {
+          log.info("[DIO RETRY] - statusCode : $statusCode");
           return await retry(
               tokenRepository, userRepository, error, api, handler);
         } else {
@@ -61,15 +62,17 @@ Future<Dio> baseApi() async {
 
 retry(TokenRepository tokenRepository, UserRepository userRepository,
     DioException error, Dio api, ErrorInterceptorHandler handler) async {
+  Logger log = LoggingUtil.logger("🚀API RETRY");
   var refreshToken = await tokenRepository.getRefreshToken();
   var accessToken = await tokenRepository.getAccessToken();
 
   var refreshApi = Dio();
-
+  refreshApi.options.baseUrl = 'http://127.0.0.1:8001/api';
   refreshApi.interceptors.clear();
 
   refreshApi.interceptors
       .add(InterceptorsWrapper(onError: (error, handler) async {
+    log.info("errror!!!");
     var statusCode = error.response?.statusCode;
     if (statusCode == 401 || statusCode == 403) {
       await tokenRepository.dropTokens();
@@ -77,19 +80,31 @@ retry(TokenRepository tokenRepository, UserRepository userRepository,
       Get.offAllNamed("/login");
       return handler.next(error);
     }
+  }, onRequest: (option, handler) {
+    log.info("request!!! : options : ${option.data}");
+  }, onResponse: (response, handler) {
+    log.info("response!!!");
   }));
+  log.info("hello1");
+
   var response = await refreshApi.post('/user/accessToken', data: {
     'accessToken': accessToken,
     'refreshToken': refreshToken,
   });
-  tokenRepository.saveAccessToken(response.data.body.accessToken);
-  error.requestOptions.headers['accessToken'] = response.data.body.accessToken;
-  var clonedRequest = await api.request(error.requestOptions.path,
-      options: Options(
-        method: error.requestOptions.method,
-        headers: error.requestOptions.headers,
-      ),
-      data: error.requestOptions.data,
-      queryParameters: error.requestOptions.queryParameters);
-  return handler.resolve(clonedRequest);
+
+  log.info("hello2");
+  if (response.data.body.accessToken != null) {
+    await tokenRepository.saveAccessToken(response.data.body.accessToken);
+    error.requestOptions.headers['accessToken'] =
+        response.data.body.accessToken;
+    var clonedRequest = await api.request(error.requestOptions.path,
+        options: Options(
+          method: error.requestOptions.method,
+          headers: error.requestOptions.headers,
+        ),
+        data: error.requestOptions.data,
+        queryParameters: error.requestOptions.queryParameters);
+    return handler.resolve(clonedRequest);
+  }
+  return handler.next(error);
 }
