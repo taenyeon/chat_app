@@ -5,13 +5,15 @@ class TokenRepository {
   Logger log = Logger("TokenRepository");
   static const accessTokenKey = "accessToken";
   static const refreshTokenkey = "refreshToken";
-  var secureStorage = Storage.secureStorage;
+  static var secureStorage = Storage.secureStorage;
 
   // Default Function
-  save(String key, String value) async =>
-      await secureStorage.write(key: key, value: value);
+  save(String key, String value) async {
+    await drop(key);
+    await secureStorage.write(key: key, value: value);
+  }
 
-  drop(String key) async => await secureStorage.delete(key: key);
+  drop(String tokenKey) async => await secureStorage.delete(key: tokenKey);
 
   // AccessToken Function
   getAccessToken() async => await secureStorage.read(key: accessTokenKey);
@@ -29,12 +31,14 @@ class TokenRepository {
 
   // Tokens Function
   saveTokens(String accessToken, String refreshToken) async {
+    log.info("saveAccessToken : $accessToken");
     await saveAccessToken(accessToken);
+    log.info("saveRefreshToken : $refreshToken");
     await saveRefreshToken(refreshToken);
   }
 
   dropTokens() async {
-    await dropAccessToken();
     await dropRefreshToken();
+    await dropAccessToken();
   }
 }

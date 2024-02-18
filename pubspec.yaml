@@ -18,7 +18,7 @@ dependencies:
   shared_preferences:
   google_fonts:
   logging:
-  change_app_package_name: ^1.1.0
+  change_app_package_name:
   stomp_dart_client:
   dropdown_button2:
 

@@ -17,9 +17,12 @@ class LoggingUtil {
     }
   }
 
-  static String getPrettyJson(Map<String, dynamic> object) {
-    const jsonEncoder = JsonEncoder.withIndent('  ');
-    return jsonEncoder.convert(object);
+  static String? getPrettyJson(Map<String, dynamic>? object) {
+    if (object != null && object.isNotEmpty) {
+      const jsonEncoder = JsonEncoder.withIndent('  ');
+      return jsonEncoder.convert(object);
+    }
+    return null;
   }
 
   static String getPrettyString(Map<String, dynamic> object) {

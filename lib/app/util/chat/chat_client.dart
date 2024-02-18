@@ -22,7 +22,7 @@ class ChatClient {
           stompConnectHeaders: {
             "access_token": accessToken,
           },
-          beforeConnect: beforeConnect,
+          // beforeConnect: beforeConnect,
           onConnect: connect,
           onDisconnect: disconnect,
         ),

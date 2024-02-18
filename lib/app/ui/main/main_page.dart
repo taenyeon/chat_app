@@ -3,6 +3,7 @@ import 'package:chat_app/app/data/token/repository/token_repository.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logging/logging.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -90,7 +91,13 @@ class MainPage extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.limeAccent,
                       ),
-                      onPressed: () => tokenRepository.dropTokens(),
+                      onPressed: () async {
+                        var logger = Logger("press!!!!!!!!!!!");
+                        logger.info("test");
+                        await tokenRepository.dropTokens();
+                        logger.info(
+                            "refreshToken : ${await tokenRepository.getRefreshToken()}");
+                      },
                       child: const Text(
                         "CLEAR",
                         style: TextStyle(
