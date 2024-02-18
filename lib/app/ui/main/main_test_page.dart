@@ -54,12 +54,11 @@ class MenuBar extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Obx(() => ListView.builder(
-                  itemCount: menuController.menuList.length,
-                  itemBuilder: (context, index) {
-                    return menu(menuController.menuList[index]);
-                  },
-                )),
+            child: ListView.builder(
+                itemCount: menuController.menuList.length,
+                itemBuilder: (context, index) => Obx(() {
+                      return menu(menuController.menuList[index]);
+                    })),
           ),
         ),
       ),
