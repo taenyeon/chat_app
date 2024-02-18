@@ -10,13 +10,17 @@ class MainTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: Row(
-        children: [
-          const MenuBar(),
-          body(),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+          child: Row(
+            children: [
+              const MenuBar(),
+              body(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -43,8 +47,8 @@ class MenuBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var menuController = Get.put(MenuButtonsController());
-    return Expanded(
-      flex: 3,
+    return Container(
+      width: 100,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
         child: Container(
@@ -54,11 +58,20 @@ class MenuBar extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-                itemCount: menuController.menuList.length,
-                itemBuilder: (context, index) => Obx(() {
+            child: Column(
+              children: [
+                Obx(
+                  () => ListView.builder(
+                    itemCount: menuController.menuList.length,
+                    itemBuilder: (context, index) {
                       return menu(menuController.menuList[index]);
-                    })),
+                    },
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

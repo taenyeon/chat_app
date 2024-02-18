@@ -10,10 +10,6 @@ class MenuButtonsController extends GetxController {
   late Logger log;
 
   RxList<MenuInfo> menuList = <MenuInfo>[].obs;
-  RxList<int> test = <int>[1, 2, 3].obs;
-  RxList<Token> test2 = <Token>[
-    Token.fromJson({"accessToken": "2134", "refreshToken": "335"})
-  ].obs;
 
   @override
   void onInit() {
@@ -27,17 +23,31 @@ class MenuButtonsController extends GetxController {
   }
 
   void select(String name) {
-    for (var menu in menuList) {
-      if (menu.name == name) {
+    for (int i = 0; i < menuList.length; i++) {
+      log.info("menuList length : ${menuList.length}");
+      log.info("for i : $i");
+      var newMenu = MenuInfo.fromJson(menuList[i].toJson());
+      if (newMenu.name == name) {
         log.info("selected Value : $name");
-        menu.isSelected = true;
-        menu.color = Colors.white;
+        newMenu.isSelected = true;
+        newMenu.color = Colors.white;
       } else {
-        menu.isSelected = false;
-        menu.color = Colors.white38;
+        newMenu.isSelected = false;
+        newMenu.color = Colors.white38;
       }
-
-      log.info("menu : ${menu.toJson()}");
+      menuList[i] = newMenu;
     }
+    // for (var menu in menuList) {
+    //   if (menu.name == name) {
+    //     log.info("selected Value : $name");
+    //     menu.isSelected = true;
+    //     menu.color = Colors.white;
+    //   } else {
+    //     menu.isSelected = false;
+    //     menu.color = Colors.white38;
+    //   }
+    //
+    //   log.info("menu : ${menu.toJson()}");
+    // }
   }
 }
