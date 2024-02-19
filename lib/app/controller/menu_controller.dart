@@ -30,10 +30,12 @@ class MenuButtonsController extends GetxController {
       if (newMenu.name == name) {
         log.info("selected Value : $name");
         newMenu.isSelected = true;
-        newMenu.color = Colors.white;
+        newMenu.color = Colors.white70;
+        newMenu.backgroundColor = Colors.white24;
       } else {
         newMenu.isSelected = false;
         newMenu.color = Colors.white38;
+        newMenu.backgroundColor = Colors.white12;
       }
       menuList[i] = newMenu;
     }

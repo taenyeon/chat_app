@@ -33,7 +33,7 @@ class MainTestPage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white24,
+            color: Colors.white10,
           ),
         ),
       ),
@@ -47,14 +47,14 @@ class MenuBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var menuController = Get.put(MenuButtonsController());
-    return Container(
+    return SizedBox(
       width: 100,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white24,
+            color: Colors.white10,
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -68,6 +68,20 @@ class MenuBar extends StatelessWidget {
                     },
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
+                  ),
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white10,
+                    ),
+                    width: 50,
+                    height: 50,
                   ),
                 ),
               ],
@@ -89,7 +103,8 @@ class MenuBar extends StatelessWidget {
             height: 50,
             child: IconButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.white10),
+                backgroundColor:
+                    MaterialStateProperty.all(menuInfo.backgroundColor),
                 foregroundColor: MaterialStateProperty.all(menuInfo.color),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
@@ -109,9 +124,9 @@ class MenuBar extends StatelessWidget {
         ),
         Text(
           menuInfo.menuName,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10,
-            color: Colors.white38,
+            color: menuInfo.color,
             decoration: TextDecoration.none,
           ),
         ),

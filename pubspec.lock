@@ -189,10 +189,10 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "797e1e341c3dd2f69f2dad42564a6feff3bfb87187d05abb93b9609e6f1645c3"
+      sha256: "49af28382aefc53562459104f64d16b9dfd1e8ef68c862d5af436cc8356ce5a8"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.0"
+    version: "5.4.1"
   dropdown_button2:
     dependency: "direct main"
     description:
@@ -641,10 +641,10 @@ packages:
     dependency: "direct main"
     description:
       name: stomp_dart_client
-      sha256: "2a9913eeab59e1b811a4ad84b3575abcd3c8205925f920679966b948fff78fa2"
+      sha256: "10ecb6255a95eec78c3b064512fc8700cd2af9506cedafe3694e9662773dd1d5"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   stream_channel:
     dependency: transitive
     description:
