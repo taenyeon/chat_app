@@ -241,14 +241,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  flexible_grid_view:
-    dependency: "direct main"
-    description:
-      name: flexible_grid_view
-      sha256: c837b55628e5177c8ceedd5b9eef04c5a360b2b855e07742657f5bbbe0f45167
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.2"
   flutter:
     dependency: "direct main"
     description: flutter
