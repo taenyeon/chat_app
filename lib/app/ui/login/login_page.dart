@@ -7,12 +7,46 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(child: Container()),
-          const Expanded(child: LoginInterface())
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(100, 10, 10, 10),
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Column(
+                  children: [
+                    Text(
+                      "ROCKET",
+                      style: TextStyle(
+                        color: Colors.limeAccent,
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            color: Colors.lightBlue,
+                            offset: Offset(0.3, 0.5),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      Icons.rocket_launch,
+                      color: Colors.limeAccent,
+                      shadows: [
+                        Shadow(
+                          color: Colors.lightBlue,
+                          offset: Offset(0.3, 0.5),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(child: LoginInterface())
         ],
       ),
     );
@@ -29,7 +63,6 @@ class LoginInterface extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(27),
-        color: Colors.black45,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -55,15 +88,19 @@ class LoginInterface extends StatelessWidget {
                     width: size.width * 0.2,
                     height: size.height * 0.05,
                     child: TextFormField(
+                      onFieldSubmitted: (value) {
+                        loginController.login();
+                      },
                       style: const TextStyle(
                         color: Colors.white,
                       ),
+                      autofocus: true,
                       controller: loginController.usernameController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(90.0),
                           borderSide: const BorderSide(
-                            color: Colors.white,
+                            color: Colors.limeAccent,
                           ),
                         ),
                         labelText: 'EMAIL',
@@ -83,6 +120,9 @@ class LoginInterface extends StatelessWidget {
                     width: size.width * 0.2,
                     height: size.height * 0.05,
                     child: TextFormField(
+                      onFieldSubmitted: (value) {
+                        loginController.login();
+                      },
                       style: const TextStyle(
                         color: Colors.white,
                       ),

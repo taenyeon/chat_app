@@ -27,8 +27,6 @@ class BaseController extends GetxController {
 
   logout() async {
     await userRepository.logout();
-    isLogin.value = false;
-    user.value = User();
     await Get.offAllNamed("/login");
   }
 }

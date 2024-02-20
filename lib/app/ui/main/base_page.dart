@@ -1,4 +1,3 @@
-import 'package:chat_app/app/controller/user_popup_controller.dart';
 import 'package:chat_app/app/data/menu/model/MenuInfo.dart';
 import 'package:chat_app/app/ui/main/main_page.dart';
 import 'package:chat_app/app/ui/web/web_page.dart';

@@ -1,3 +1,4 @@
+import 'package:chat_app/app/util/alert/snackbar_util.dart';
 import 'package:chat_app/app/util/response/response.dart';
 import 'package:chat_app/app/data/token/model/token.dart';
 import 'package:chat_app/app/data/user/model/user.dart';
@@ -24,18 +25,10 @@ class UserApi {
     var data = ResponseData.fromJson(response.data);
 
     if (data.resultCode == 'SUCCESS') {
-      Get.snackbar(
-        "LOGIN",
-        "SUCCESS",
-        colorText: Colors.white,
-      );
+      SnackbarUtil.sendMessage("Login Success.");
       return Token.fromJson(data.body);
     } else {
-      Get.snackbar(
-        "ERROR",
-        "USER NOT FOUND",
-        colorText: Colors.red,
-      );
+      SnackbarUtil.sendError("Login FAIL. \nSee your Email or Password.");
       return Future.error("[UserApi] login - USER NOT FOUND");
     }
   }
@@ -48,12 +41,22 @@ class UserApi {
       if (data.resultCode == 'SUCCESS') {
         return User.fromJson(data.body);
       } else {
-        Get.snackbar("ERROR", "USER NOT FOUND");
+        Get.snackbar(
+          "ERROR",
+          "USER NOT FOUND",
+          colorText: Colors.red,
+          snackPosition: SnackPosition.BOTTOM,
+        );
         Get.offAllNamed("/login");
         return Future.error("[UserApi] getUserInfo - USER NOT FOUND");
       }
     } catch (e) {
-      Get.snackbar("ERROR", "USER NOT FOUND");
+      Get.snackbar(
+        "ERROR",
+        "USER NOT FOUND",
+        colorText: Colors.red,
+        snackPosition: SnackPosition.BOTTOM,
+      );
       Get.offAndToNamed("/login");
       return Future.error("[UserApi] getUserInfo - USER NOT FOUND");
     }
