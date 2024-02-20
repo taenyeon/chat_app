@@ -1,5 +1,7 @@
+import 'package:chat_app/app/controller/user_popup_controller.dart';
 import 'package:chat_app/app/data/menu/model/MenuInfo.dart';
-import 'package:chat_app/app/data/menu/model/MenuItems.dart';
+import 'package:chat_app/app/ui/web/web_mac_page.dart';
+import 'package:chat_app/app/ui/web/web_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/app/controller/menu_controller.dart';
@@ -10,16 +12,15 @@ class MainTestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
-          child: Row(
-            children: [
-              const MenuBar(),
-              body(),
-            ],
-          ),
+    UserPopupController userPopupController = Get.put(UserPopupController());
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+        child: Row(
+          children: [
+            const MenuBar(),
+            body(),
+          ],
         ),
       ),
     );
@@ -34,6 +35,18 @@ class MainTestPage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.white10,
+          ),
+          child: GetX<MenuButtonsController>(
+            builder: (MenuButtonsController controller) {
+              var selected = controller.selected.value;
+              switch (selected) {
+                case 'web':
+                  return const WebPage();
+                  break;
+                default:
+                  return Container();
+              }
+            },
           ),
         ),
       ),
@@ -60,33 +73,173 @@ class MenuBar extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Obx(
-                  () => ListView.builder(
-                    itemCount: menuController.menuList.length,
-                    itemBuilder: (context, index) {
-                      return menu(menuController.menuList[index]);
-                    },
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                  ),
-                ),
-                Expanded(
-                  child: Container(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white10,
-                    ),
-                    width: 50,
-                    height: 50,
-                  ),
-                ),
+                buildMainMenu(menuController),
+                buildMenuList(menuController),
+                buildExpanded(),
+                popup(),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Obx buildMenuList(MenuButtonsController menuController) {
+    return Obx(
+      () => ListView.builder(
+        itemCount: menuController.menuList.length,
+        itemBuilder: (context, index) {
+          return menu(menuController.menuList[index]);
+        },
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+      ),
+    );
+  }
+
+  Expanded buildExpanded() {
+    return Expanded(
+      child: Container(),
+    );
+  }
+
+  Padding buildMainMenu(MenuButtonsController menuController) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+      child: SizedBox(
+        width: 50,
+        height: 50,
+        child: IconButton(
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(Colors.limeAccent),
+          ),
+          onPressed: () {
+            menuController.clear();
+          },
+          icon: const Icon(
+            Icons.rocket_launch,
+            shadows: [
+              Shadow(
+                color: Colors.lightBlue,
+                offset: Offset(3, 3),
+              ),
+            ],
+          ),
+          iconSize: 40,
+        ),
+      ),
+    );
+  }
+
+  Padding popup() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.limeAccent,
+        ),
+        width: 50,
+        height: 50,
+        child: PopupMenuButton(
+          enabled: true,
+          elevation: 2,
+          surfaceTintColor: Colors.black,
+          offset: const Offset(70, 0),
+          tooltip: "",
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          color: Colors.black87,
+          shadowColor: Colors.limeAccent,
+          icon: const Icon(Icons.person),
+          iconColor: Colors.black26,
+          iconSize: 35,
+          constraints: const BoxConstraints(
+            minHeight: 200,
+            minWidth: 200,
+          ),
+          itemBuilder: (BuildContext context) {
+            return [
+              PopupMenuItem(
+                enabled: false,
+                child: SizedBox(
+                  height: 50,
+                  width: 250,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 2, 10, 2),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.limeAccent,
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            size: 25,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GetX<UserPopupController>(
+                                  builder: (UserPopupController controller) {
+                                return Text(
+                                  controller.user.value.name,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }),
+                              GetX<UserPopupController>(
+                                  builder: (UserPopupController controller) {
+                                return Text(
+                                  controller.user.value.createdAt,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const PopupMenuItem(
+                child: Text(
+                  "Profile",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const PopupMenuItem(
+                child: Text(
+                  "Settings",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const PopupMenuItem(
+                child: Text(
+                  "Logout",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ];
+          },
         ),
       ),
     );

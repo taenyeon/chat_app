@@ -1,5 +1,6 @@
 import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/log/logging_util.dart';
+import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,10 @@ import 'package:chat_app/app/route/route.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 
-void main() async {
+void main(List<String> args) async {
+  if (runWebViewTitleBarWidget(args)) {
+    return;
+  }
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     if (kDebugMode) {

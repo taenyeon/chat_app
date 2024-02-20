@@ -3,17 +3,24 @@ import 'package:flutter/material.dart';
 enum MenuItems {
   board(
     menuName: "BOARD",
-    isSelected: true,
+    isSelected: false,
     color: Colors.white38,
     backgroundColor: Colors.white12,
     icon: Icon(Icons.text_snippet),
   ),
   chat(
     menuName: "CHAT",
-    isSelected: true,
+    isSelected: false,
     color: Colors.white38,
     backgroundColor: Colors.white12,
     icon: Icon(Icons.chat),
+  ),
+  web(
+    menuName: "WEB",
+    isSelected: false,
+    color: Colors.white38,
+    backgroundColor: Colors.white12,
+    icon: Icon(Icons.computer),
   ),
   ;
 

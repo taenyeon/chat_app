@@ -21,13 +21,20 @@ dependencies:
   change_app_package_name:
   stomp_dart_client:
   dropdown_button2:
+  webview_flutter:
+  desktop_webview_window:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner:
   flutter_lints:
-
+dependency_overrides:
+  webview_flutter_wkwebview:
+    git:
+      url: https://github.com/stuartmorgan/packages
+      path: packages/webview_flutter/webview_flutter_wkwebview
+      ref: webview-macos
 flutter:
   uses-material-design: true
   assets:
