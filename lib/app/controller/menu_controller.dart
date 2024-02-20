@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:logging/logging.dart';
 
 import '../data/menu/model/MenuInfo.dart';
-import '../data/token/model/token.dart';
 
 class MenuButtonsController extends GetxController {
   late Logger log;
@@ -19,7 +18,6 @@ class MenuButtonsController extends GetxController {
         MenuItems.values.map((e) => MenuInfo.fromJson(e.toJson())).toList();
     RxList<MenuInfo> menus = list.obs;
     menuList = menus;
-    log.info("menu : ${menus.toString()}");
     super.onInit();
   }
 
@@ -27,14 +25,11 @@ class MenuButtonsController extends GetxController {
     if (selected.value != name) {
       selected.value = name;
       for (int i = 0; i < menuList.length; i++) {
-        log.info("menuList length : ${menuList.length}");
-        log.info("for i : $i");
         var newMenu = MenuInfo.fromJson(menuList[i].toJson());
         if (newMenu.name == name) {
-          log.info("selected Value : $name");
           newMenu.isSelected = true;
           newMenu.color = Colors.white70;
-          newMenu.backgroundColor = Colors.white24;
+          newMenu.backgroundColor = Colors.white30;
         } else {
           newMenu.isSelected = false;
           newMenu.color = Colors.white38;
@@ -45,8 +40,21 @@ class MenuButtonsController extends GetxController {
     }
   }
 
+  void selectMain() {
+    selected.value = "main";
+
+    for (int i = 0; i < menuList.length; i++) {
+      var newMenu = MenuInfo.fromJson(menuList[i].toJson());
+      newMenu.isSelected = false;
+      newMenu.color = Colors.white38;
+      newMenu.backgroundColor = Colors.white12;
+      menuList[i] = newMenu;
+    }
+  }
+
   void clear() {
     selected.value = "";
+
     for (int i = 0; i < menuList.length; i++) {
       var newMenu = MenuInfo.fromJson(menuList[i].toJson());
       newMenu.isSelected = false;

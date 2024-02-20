@@ -1,18 +1,20 @@
 import 'package:chat_app/app/controller/user_popup_controller.dart';
 import 'package:chat_app/app/data/menu/model/MenuInfo.dart';
-import 'package:chat_app/app/ui/web/web_mac_page.dart';
+import 'package:chat_app/app/ui/main/main_page.dart';
 import 'package:chat_app/app/ui/web/web_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/app/controller/menu_controller.dart';
 import 'package:logging/logging.dart';
 
-class MainTestPage extends StatelessWidget {
-  const MainTestPage({super.key});
+import '../../controller/base_controller.dart';
+
+class BasePage extends StatelessWidget {
+  const BasePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    UserPopupController userPopupController = Get.put(UserPopupController());
+    var mainController = Get.put(BaseController());
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
@@ -42,7 +44,8 @@ class MainTestPage extends StatelessWidget {
               switch (selected) {
                 case 'web':
                   return const WebPage();
-                  break;
+                case 'main':
+                  return const MainPage();
                 default:
                   return Container();
               }
@@ -60,6 +63,7 @@ class MenuBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var menuController = Get.put(MenuButtonsController());
+    var mainController = Get.put(BaseController());
     return SizedBox(
       width: 100,
       child: Padding(
@@ -76,7 +80,7 @@ class MenuBar extends StatelessWidget {
                 buildMainMenu(menuController),
                 buildMenuList(menuController),
                 buildExpanded(),
-                popup(),
+                buildUserPopup(mainController),
               ],
             ),
           ),
@@ -115,7 +119,7 @@ class MenuBar extends StatelessWidget {
             foregroundColor: MaterialStateProperty.all(Colors.limeAccent),
           ),
           onPressed: () {
-            menuController.clear();
+            menuController.selectMain();
           },
           icon: const Icon(
             Icons.rocket_launch,
@@ -132,7 +136,7 @@ class MenuBar extends StatelessWidget {
     );
   }
 
-  Padding popup() {
+  Padding buildUserPopup(BaseController mainController) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
       child: Container(
@@ -142,7 +146,7 @@ class MenuBar extends StatelessWidget {
         ),
         width: 50,
         height: 50,
-        child: PopupMenuButton(
+        child: PopupMenuButton<String>(
           enabled: true,
           elevation: 2,
           surfaceTintColor: Colors.black,
@@ -160,6 +164,15 @@ class MenuBar extends StatelessWidget {
             minHeight: 200,
             minWidth: 200,
           ),
+          onSelected: (String value) async {
+            Logger("onSelectedTest").info("value : $value");
+            switch (value) {
+              case "Logout":
+                await mainController.logout();
+                break;
+              default:
+            }
+          },
           itemBuilder: (BuildContext context) {
             return [
               PopupMenuItem(
@@ -191,8 +204,8 @@ class MenuBar extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              GetX<UserPopupController>(
-                                  builder: (UserPopupController controller) {
+                              GetX<BaseController>(
+                                  builder: (BaseController controller) {
                                 return Text(
                                   controller.user.value.name,
                                   style: const TextStyle(
@@ -202,8 +215,8 @@ class MenuBar extends StatelessWidget {
                                   ),
                                 );
                               }),
-                              GetX<UserPopupController>(
-                                  builder: (UserPopupController controller) {
+                              GetX<BaseController>(
+                                  builder: (BaseController controller) {
                                 return Text(
                                   controller.user.value.createdAt,
                                   style: const TextStyle(
@@ -221,18 +234,21 @@ class MenuBar extends StatelessWidget {
                 ),
               ),
               const PopupMenuItem(
+                value: "Profile",
                 child: Text(
                   "Profile",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
               const PopupMenuItem(
+                value: "Settings",
                 child: Text(
                   "Settings",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
               const PopupMenuItem(
+                value: "Logout",
                 child: Text(
                   "Logout",
                   style: TextStyle(color: Colors.white),
@@ -266,7 +282,6 @@ class MenuBar extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Logger("test!!!").info("value : ${menuInfo.name}");
                 menuController.select(menuInfo.name);
               },
               icon: menuInfo.icon,

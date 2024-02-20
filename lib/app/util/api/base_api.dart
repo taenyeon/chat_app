@@ -36,10 +36,11 @@ Future<Dio> baseApi() async {
         return handler.next(option);
       },
       onError: (error, handler) async {
+        var accessToken = await tokenRepository.getAccessToken();
         var statusCode = error.response?.statusCode;
         log.info(
             "[DIO ERROR] - statusCode : $statusCode, message : ${error.message}");
-        if (statusCode == 401 || statusCode == 403) {
+        if ((statusCode == 401 || statusCode == 403) && accessToken != null) {
           log.info("[DIO RETRY] - statusCode : $statusCode");
           return await retry(
               tokenRepository, userRepository, error, api, handler);

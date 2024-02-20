@@ -36,9 +36,7 @@ class LoginController extends GetxController {
   void login() async {
     Token? token = await userRepository.login(
         usernameController.text, passwordController.text);
-    if (token != null) {
-      await tokenRepository.saveTokens(token.accessToken, token.refreshToken);
-      await Get.offAllNamed("/");
-    }
+    await tokenRepository.saveTokens(token!.accessToken, token.refreshToken);
+    await Get.offAllNamed("/");
   }
 }

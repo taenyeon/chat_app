@@ -36,7 +36,7 @@ class _WebPageState extends State<WebPage> {
         ),
       )
       ..canGoBack()
-      ..loadRequest(Uri.parse('https://flutter.dev'));
+      ..loadRequest(Uri.parse('https://naver.com'));
   }
 
   @override

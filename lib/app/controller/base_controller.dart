@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 
 import '../data/user/model/user.dart';
 
-class MainController extends GetxController {
+class BaseController extends GetxController {
   late Logger log;
   late UserRepository userRepository;
 
@@ -12,21 +12,23 @@ class MainController extends GetxController {
   late Rx<User> user = User().obs;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     log = Logger("MainController");
     userRepository = UserRepository();
+    await loadUser();
     super.onInit();
   }
 
-  void loadUser() async {
+  loadUser() async {
     var user = await userRepository.getUserInfo();
     isLogin.value = true;
     this.user.value = user;
   }
 
-  void logout() async {
+  logout() async {
     await userRepository.logout();
     isLogin.value = false;
     user.value = User();
+    await Get.offAllNamed("/login");
   }
 }

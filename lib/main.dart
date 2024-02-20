@@ -1,17 +1,23 @@
 import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/log/logging_util.dart';
-import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/app/route/route.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
+import 'package:window_manager/window_manager.dart';
+import 'dart:io';
 
 void main(List<String> args) async {
-  if (runWebViewTitleBarWidget(args)) {
-    return;
-  }
+  WidgetsFlutterBinding.ensureInitialized();
+  settingLogger();
+  await settingDesktopMinSize();
+
+  runApp(const MyApp());
+}
+
+void settingLogger() {
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((record) {
     if (kDebugMode) {
@@ -24,8 +30,14 @@ void main(List<String> args) async {
           '${record.message}');
     }
   });
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+}
+
+Future<void> settingDesktopMinSize() async {
+  await windowManager.ensureInitialized();
+
+  if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+    WindowManager.instance.setMinimumSize(const Size(1200, 600));
+  }
 }
 
 class MyApp extends StatelessWidget {
