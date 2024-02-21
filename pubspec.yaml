@@ -24,6 +24,7 @@ dependencies:
   webview_flutter:
   desktop_webview_window:
   window_manager:
+  flutter_inappwebview:
 
 dev_dependencies:
   flutter_test:

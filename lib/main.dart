@@ -13,6 +13,7 @@ void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   settingLogger();
   await settingDesktopMinSize();
+  ChatClient.init();
 
   runApp(const MyApp());
 }
@@ -46,7 +47,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    ChatClient.init();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.rightToLeft,
