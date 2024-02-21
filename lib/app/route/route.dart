@@ -1,10 +1,12 @@
 import 'package:chat_app/app/ui/Login/login_page.dart';
+import 'package:chat_app/app/ui/chat/chat_page.dart';
 import 'package:chat_app/app/ui/main/main_page.dart';
 import 'package:chat_app/app/ui/main/base_page.dart';
 import 'package:get/get.dart';
 
-abstract class Route {
+class Route {
   static const initial = '/';
+  static const chat = '/chat';
   static const login = '/login';
 }
 

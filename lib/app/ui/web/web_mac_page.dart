@@ -9,6 +9,8 @@ class WebMacPage extends StatefulWidget {
 }
 
 class _WebMacPage extends State<WebMacPage> {
+  final String url = "https://ez-ace.ncpworkplace.com/v/home/";
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -26,7 +28,10 @@ class _WebMacPage extends State<WebMacPage> {
           ),
           onPressed: () async {
             final webview = await WebviewWindow.create(
-              configuration: const CreateConfiguration(),
+              configuration: const CreateConfiguration(
+                title: "webViewer",
+                titleBarTopPadding: 0,
+              ),
             );
             webview
               ..registerJavaScriptMessageHandler("test", (name, body) {
@@ -55,23 +60,24 @@ class _WebMacPage extends State<WebMacPage> {
               }
                 }
               """)
-              ..launch("https://naver.com");
+              ..launch(url);
           },
-          child: Column(
+          child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 "open other window browser",
                 style: TextStyle(
                   color: Colors.white70,
                 ),
               ),
-              IconButton(
-                  icon: const Icon(
-                    Icons.desktop_windows,
-                    color: Colors.white70,
-                  ),
-                  onPressed: () {}),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.desktop_windows_outlined,
+                  color: Colors.white70,
+                ),
+              ),
             ],
           ),
         ),

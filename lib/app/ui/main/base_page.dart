@@ -1,4 +1,5 @@
 import 'package:chat_app/app/data/menu/model/MenuInfo.dart';
+import 'package:chat_app/app/ui/chat/chat_page.dart';
 import 'package:chat_app/app/ui/main/main_page.dart';
 import 'package:chat_app/app/ui/web/web_mac_page.dart';
 import 'package:chat_app/app/ui/web/web_page.dart';
@@ -45,6 +46,8 @@ class BasePage extends StatelessWidget {
               switch (selected) {
                 case 'web':
                   return const WebMacPage();
+                case 'chat':
+                  return const ChatPage();
                 case 'main':
                   return const MainPage();
                 default:

@@ -1,18 +1,14 @@
 class ResponseData {
   late String resultCode;
   late String resultMessage;
-  late Map<String, dynamic> body;
+  late dynamic body;
 
   ResponseData({resultCode, resultMessage, body});
 
   ResponseData.fromJson(Map<String, dynamic> json) {
     resultCode = json['resultCode'];
     resultMessage = json['resultMessage'];
-    if (json['body'] == null) {
-      body = <String, dynamic>{};
-    } else {
-      body = json['body'];
-    }
+    body = json['body'];
   }
 
   Map<String, dynamic> toJson() {
