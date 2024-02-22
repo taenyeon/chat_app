@@ -111,16 +111,16 @@ class ChatPage extends StatelessWidget {
   Padding buildCurrentChatRoomName() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      // child: GetX<ChatController>(builder: (ChatController controller) {
-      //   return Text(
-      //     controller.selectedChatRoom.value.name,
-      //     style: const TextStyle(
-      //       color: Colors.white,
-      //       fontSize: 20,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   );
-      // }),
+      child: GetX<ChatController>(builder: (ChatController controller) {
+        return Text(
+          controller.selectedChatRoom.value.name,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      }),
     );
   }
 

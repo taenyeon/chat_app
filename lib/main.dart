@@ -37,7 +37,7 @@ Future<void> settingDesktopMinSize() async {
   await windowManager.ensureInitialized();
 
   if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
-    WindowManager.instance.setMinimumSize(const Size(1200, 600));
+    WindowManager.instance.setMinimumSize(const Size(800, 600));
   }
 }
 
