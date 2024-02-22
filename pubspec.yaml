@@ -25,6 +25,7 @@ dependencies:
   desktop_webview_window:
   window_manager:
   flutter_inappwebview:
+  chat_bubbles:
 
 dev_dependencies:
   flutter_test:
