@@ -24,8 +24,13 @@ dependencies:
   webview_flutter:
   desktop_webview_window:
   window_manager:
-  flutter_inappwebview:
   chat_bubbles:
+  flutter_chat_ui:
+  file_picker:
+  image_picker:
+  open_filex:
+  uuid:
+  bubble:
 
 dev_dependencies:
   flutter_test:
@@ -42,3 +47,4 @@ flutter:
   uses-material-design: true
   assets:
     - image/main.jpg
+    - assets/messages.json

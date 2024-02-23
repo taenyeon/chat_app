@@ -2,6 +2,7 @@ import 'package:chat_app/app/controller/base_controller.dart';
 import 'package:chat_app/app/controller/chat_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/chat/model/chat_room.dart';
+import 'package:chat_app/app/ui/chat/chat_page_v2.dart';
 import 'package:chat_bubbles/bubbles/bubble_normal.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
@@ -61,48 +62,50 @@ class ChatPage extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(4, 8, 8, 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white10,
-                ),
-                child: Column(
-                  children: [
-                    buildCurrentChatRoomName(),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          SingleChildScrollView(
-                            child: Obx(
-                              () => ListView.builder(
-                                  itemCount:
-                                      chatRoomController.chatMessages.length,
-                                  shrinkWrap: true,
-                                  physics: const PageScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    ChatMessage chatMessage =
-                                        chatRoomController.chatMessages[index];
-                                    return buildMessage(
-                                        chatMessage, baseController);
-                                  }),
-                            ),
-                          ),
-                          MessageBar(
-                            messageBarColor: Colors.white10,
-                            sendButtonColor: Colors.limeAccent,
-                            onSend: (_) {},
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+          const Expanded(
+            child: ChatPageV2(),
           )
+
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(4, 8, 8, 8),
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(10),
+          //       color: Colors.white10,
+          //     ),
+          //     child: Column(
+          //       children: [
+          //         buildCurrentChatRoomName(),
+          //         Expanded(
+          //           child: Stack(
+          //             children: [
+          //               SingleChildScrollView(
+          //                 child: Obx(
+          //                   () => ListView.builder(
+          //                       itemCount:
+          //                           chatRoomController.chatMessages.length,
+          //                       shrinkWrap: true,
+          //                       physics: const PageScrollPhysics(),
+          //                       itemBuilder: (context, index) {
+          //                         ChatMessage chatMessage =
+          //                             chatRoomController.chatMessages[index];
+          //                         return buildMessage(
+          //                             chatMessage, baseController);
+          //                       }),
+          //                 ),
+          //               ),
+          //               MessageBar(
+          //                 messageBarColor: Colors.white10,
+          //                 sendButtonColor: Colors.limeAccent,
+          //                 onSend: (_) {},
+          //               )
+          //             ],
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

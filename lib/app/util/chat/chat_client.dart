@@ -16,20 +16,24 @@ class ChatClient {
     var accessToken = await tokenRepository.getAccessToken();
     log.info("[INIT] accessToken : $accessToken");
     if (accessToken != null && client == null) {
-      client = StompClient(
-        config: StompConfig.sockJS(
-          url: 'http://localhost:8000/chat',
-          stompConnectHeaders: {
-            "access_token": accessToken,
-          },
-          // beforeConnect: beforeConnect,
-          onConnect: connect,
-          onDisconnect: disconnect,
-        ),
-      );
+      client = stompClient(accessToken);
       //client?.activate();
       client?.activate();
     }
+  }
+
+  static StompClient stompClient(accessToken) {
+    return StompClient(
+      config: StompConfig.sockJS(
+        url: 'http://localhost:8000/chat',
+        stompConnectHeaders: {
+          "access_token": accessToken,
+        },
+        // beforeConnect: beforeConnect,
+        onConnect: connect,
+        onDisconnect: disconnect,
+      ),
+    );
   }
 
   static disconnect(StompFrame frame) {
