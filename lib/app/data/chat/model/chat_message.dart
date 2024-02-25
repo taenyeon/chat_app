@@ -3,6 +3,7 @@ class ChatMessage {
   late String roomId;
   late int memberId;
   late String payload;
+  late int createdAt;
   late DateTime issuedDateTime;
 
   ChatMessage({id, roomId, memberId, payload, issuedDateTime});
@@ -21,7 +22,11 @@ class ChatMessage {
     data['roomId'] = roomId;
     data['memberId'] = memberId;
     data['payload'] = payload;
-    data['issuedDateTime'] = issuedDateTime;
+    data['issuedDateTime'] = issuedDateTime.millisecond;
     return data;
+  }
+
+  String toJsonString() {
+    return "roomId:'$roomId',memberId:$memberId,payload:'$payload'";
   }
 }

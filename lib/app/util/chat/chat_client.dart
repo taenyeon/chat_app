@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/token/repository/token_repository.dart';
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';
@@ -60,11 +61,11 @@ class ChatClient {
     );
   }
 
-  send(Map<String, dynamic> message) {
+  static send(ChatMessage message) async {
     client?.send(
       destination: "/pub/chat/message",
-      headers: {"accessToken": "token"},
-      body: message.toString(),
+      headers: {"access_token": await tokenRepository.getAccessToken()},
+      body: jsonEncode(message.toJson()),
     );
   }
 }

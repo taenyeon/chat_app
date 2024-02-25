@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bubble/bubble.dart';
+import 'package:chat_app/app/data/chat/model/chat_message.dart';
+import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -9,11 +11,12 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../util/time/time_util.dart';
 
 class ChatPageV2 extends StatefulWidget {
   const ChatPageV2({super.key});
@@ -202,6 +205,14 @@ class _ChatPageV2State extends State<ChatPageV2> {
       text: message.text,
     );
 
+    ChatClient.send(ChatMessage.fromJson({
+      "id": "",
+      "roomId": "fdgfdshfd",
+      "memberId": 1,
+      "payload": message.text,
+      "issuedDateTime": DateTime.now(),
+    }));
+
     _addMessage(textMessage);
   }
 
@@ -218,7 +229,20 @@ class _ChatPageV2State extends State<ChatPageV2> {
 
   Widget _bubbleBuilder(Widget child,
           {required message, required nextMessageInGroup}) =>
-      Bubble();
+      Bubble(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            child,
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              TimeUtil.dateFormat(message.createdAt),
+            ),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -228,6 +252,7 @@ class _ChatPageV2State extends State<ChatPageV2> {
           onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
+          bubbleBuilder: _bubbleBuilder,
           showUserAvatars: true,
           showUserNames: true,
           user: _user,

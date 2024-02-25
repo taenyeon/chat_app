@@ -31,7 +31,8 @@ dependencies:
   open_filex:
   uuid:
   bubble:
-
+  intl:
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter
