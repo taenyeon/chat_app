@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
-enum ColorList {
-  background(color: Color(0xff1c1c1c)),
-  menuBar(color: Colors.black12),
-  menu(color: Colors.black26),
-  ;
+class ColorList {
+  static const Color none = Color.fromRGBO(0, 0, 0, 0);
 
-  const ColorList({
-    required this.color,
-  });
+  static const Color background = Color(0xff1c1c1c);
 
-  final Color? color;
+  static const Color tabBackground = Colors.white10;
 
-  toJson() => <String, dynamic>{
-        "color": color,
-      };
+  static const Color menuBar = Colors.white10;
+  static const Color menu = Colors.white10;
+
+  static const Color buttonColor = Colors.white10;
 }

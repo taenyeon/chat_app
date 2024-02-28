@@ -16,6 +16,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../util/color/color_list.dart';
 import '../../util/time/time_util.dart';
 
 class ChatPageV2 extends StatefulWidget {
@@ -46,47 +47,76 @@ class _ChatPageV2State extends State<ChatPageV2> {
   void _handleAttachmentPressed() {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.white10,
-      builder: (BuildContext context) => SafeArea(
-        child: Container(
-          height: 144,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleImageSelection();
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text('Photo'),
-                  ),
+      backgroundColor: ColorList.background,
+      builder: (BuildContext context) => Container(
+        height: 300,
+        padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0)),
+                ),
+                padding: MaterialStateProperty.all(
+                    const EdgeInsets.fromLTRB(10, 20, 10, 20)),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                _handleImageSelection();
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text('Photo'),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _handleFileSelection();
-                },
-                child: const Align(
+            ),
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0)),
+                ),
+                padding: MaterialStateProperty.all(
+                    const EdgeInsets.fromLTRB(10, 20, 10, 20)),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                _handleFileSelection();
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Text('File'),
                 ),
               ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Align(
+            ),
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0)),
+                ),
+                padding: MaterialStateProperty.all(
+                    const EdgeInsets.fromLTRB(10, 20, 10, 20)),
+              ),
+              onPressed: () => Navigator.pop(context),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Text(
                     'Cancel',
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -230,6 +260,9 @@ class _ChatPageV2State extends State<ChatPageV2> {
   Widget _bubbleBuilder(Widget child,
           {required message, required nextMessageInGroup}) =>
       Bubble(
+        color: Colors.black26,
+        borderColor: ColorList.none,
+        shadowColor: ColorList.none,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -237,44 +270,87 @@ class _ChatPageV2State extends State<ChatPageV2> {
             const SizedBox(
               height: 5,
             ),
-            Text(
-              TimeUtil.dateFormat(message.createdAt),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                TimeUtil.dateFormat(message.createdAt),
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+              ),
             ),
           ],
         ),
       );
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Chat(
-          messages: _messages,
-          onAttachmentPressed: _handleAttachmentPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          onSendPressed: _handleSendPressed,
-          bubbleBuilder: _bubbleBuilder,
-          showUserAvatars: true,
-          showUserNames: true,
-          user: _user,
-          theme: const DefaultChatTheme(
-            backgroundColor: Colors.white10,
-            primaryColor: Colors.limeAccent,
-            sentMessageBodyTextStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              height: 1.5,
-            ),
-            sentMessageDocumentIconColor: Colors.black45,
-            sendButtonIcon: Icon(
-              Icons.send,
-              color: Colors.limeAccent,
-            ),
-            seenIcon: Text(
-              'read',
-              style: TextStyle(
-                fontSize: 10.0,
+  Widget build(BuildContext context) => Expanded(
+        child: Container(
+          child: Chat(
+            messages: _messages,
+            onAttachmentPressed: _handleAttachmentPressed,
+            onMessageTap: _handleMessageTap,
+            onPreviewDataFetched: _handlePreviewDataFetched,
+            onSendPressed: _handleSendPressed,
+            bubbleBuilder: _bubbleBuilder,
+            showUserAvatars: true,
+            showUserNames: true,
+            user: _user,
+            theme: const DefaultChatTheme(
+              backgroundColor: ColorList.none,
+              sentMessageBodyTextStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                height: 1.5,
               ),
+              receivedMessageBodyTextStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                height: 1.5,
+              ),
+              receivedMessageLinkDescriptionTextStyle: TextStyle(
+                color: Colors.white,
+              ),
+              receivedMessageLinkTitleTextStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                height: 1.375,
+              ),
+              receivedMessageBodyLinkTextStyle: TextStyle(
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.blue,
+                color: Colors.blue,
+              ),
+              sentMessageDocumentIconColor: Colors.black45,
+              sentMessageLinkDescriptionTextStyle: TextStyle(
+                color: Colors.white,
+              ),
+              sentMessageLinkTitleTextStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                height: 1.375,
+              ),
+              sentMessageBodyLinkTextStyle: TextStyle(
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.blue,
+                color: Colors.blue,
+              ),
+              sendButtonIcon: Icon(
+                Icons.send,
+                color: Colors.limeAccent,
+              ),
+              seenIcon: Text(
+                'read',
+                style: TextStyle(
+                  fontSize: 10.0,
+                ),
+              ),
+              inputBackgroundColor: ColorList.background,
             ),
           ),
         ),
