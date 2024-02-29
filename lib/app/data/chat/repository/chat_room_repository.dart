@@ -5,12 +5,6 @@ import 'package:chat_app/app/data/chat/provider/chat_room_api.dart';
 class ChatRoomRepository {
   final ChatRoomApi chatRoomApi = ChatRoomApi();
 
-  Future<List<ChatRoom>> loadMyChatRoom() async {
-    // return await chatRoomApi.selectMyChatRoomList();
-    return chatRoomApi.selectMyChatRoomListTest();
-  }
-
-  Future<List<ChatMessage>> selectChatMessageList(String roomId) async {
-    return await chatRoomApi.selectChatMessageListTest(roomId);
-  }
+  Future<List<ChatRoom>> getMyChatRoomList() async =>
+      await chatRoomApi.getMyChatRoomList();
 }

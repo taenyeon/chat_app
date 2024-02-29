@@ -23,7 +23,7 @@ class ChatController extends GetxController {
   }
 
   loadMyChatRoom() async {
-    chatRoomList.value = await chatRoomRepository.loadMyChatRoom();
+    chatRoomList.value = await chatRoomRepository.getMyChatRoomList();
   }
 
   void select(String id) async {
@@ -42,6 +42,5 @@ class ChatController extends GetxController {
         chatRoomList[i] = chatRoom;
       }
     }
-    chatMessages.value = await chatRoomRepository.selectChatMessageList(id);
   }
 }

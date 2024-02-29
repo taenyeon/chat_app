@@ -267,11 +267,8 @@ class _ChatPageV2State extends State<ChatPageV2> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             child,
-            const SizedBox(
-              height: 5,
-            ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Text(
                 TimeUtil.dateFormat(message.createdAt),
                 style: const TextStyle(
@@ -301,13 +298,13 @@ class _ChatPageV2State extends State<ChatPageV2> {
               backgroundColor: ColorList.none,
               sentMessageBodyTextStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 height: 1.5,
               ),
               receivedMessageBodyTextStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 height: 1.5,
               ),
@@ -316,7 +313,7 @@ class _ChatPageV2State extends State<ChatPageV2> {
               ),
               receivedMessageLinkTitleTextStyle: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w800,
                 height: 1.375,
               ),
@@ -328,10 +325,11 @@ class _ChatPageV2State extends State<ChatPageV2> {
               sentMessageDocumentIconColor: Colors.black45,
               sentMessageLinkDescriptionTextStyle: TextStyle(
                 color: Colors.white,
+                fontSize: 14,
               ),
               sentMessageLinkTitleTextStyle: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w800,
                 height: 1.375,
               ),

@@ -1,10 +1,11 @@
+import 'dart:ffi';
+
 class ChatMessage {
   late String id;
   late String roomId;
   late int memberId;
   late String payload;
   late int createdAt;
-  late DateTime issuedDateTime;
 
   ChatMessage({id, roomId, memberId, payload, issuedDateTime});
 
@@ -13,7 +14,7 @@ class ChatMessage {
     roomId = json['roomId'];
     memberId = json['memberId'];
     payload = json['payload'];
-    issuedDateTime = json['issuedDateTime'];
+    createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -22,7 +23,7 @@ class ChatMessage {
     data['roomId'] = roomId;
     data['memberId'] = memberId;
     data['payload'] = payload;
-    data['issuedDateTime'] = issuedDateTime.millisecond;
+    data['createdAt'] = createdAt;
     return data;
   }
 

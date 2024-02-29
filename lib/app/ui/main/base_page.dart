@@ -1,3 +1,4 @@
+import 'package:chat_app/app/controller/member_controller.dart';
 import 'package:chat_app/app/data/menu/model/MenuInfo.dart';
 import 'package:chat_app/app/ui/chat/chat_page.dart';
 import 'package:chat_app/app/ui/chat/chat_page_v2.dart';
@@ -17,6 +18,7 @@ class BasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var mainController = Get.put(BaseController());
+    var memberController = Get.put(MemberController());
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),

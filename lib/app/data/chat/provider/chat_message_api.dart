@@ -11,13 +11,15 @@ import 'package:logging/logging.dart';
 import '../model/chat_room.dart';
 
 class ChatRoomApi {
-  final Logger log = Logger("UserApi");
+  final Logger log = Logger("ChatMessageApi");
 
   Future<Dio> getApi() async {
     var api = await baseApi();
-    api.options.baseUrl = '${api.options.baseUrl}/chatRoom';
+    api.options.baseUrl = '${api.options.baseUrl}/chat';
     return api;
   }
+
+  getChatMessageByRoomId() {}
 
   Future<List<ChatRoom>> getMyChatRoomList() async {
     var api = await getApi();

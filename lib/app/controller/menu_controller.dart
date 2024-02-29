@@ -13,7 +13,7 @@ class MenuButtonsController extends GetxController {
 
   @override
   void onInit() {
-    log = Logger("menuController");
+    log = Logger("MenuController");
     List<MenuInfo> list =
         MenuItems.values.map((e) => MenuInfo.fromJson(e.toJson())).toList();
     RxList<MenuInfo> menus = list.obs;

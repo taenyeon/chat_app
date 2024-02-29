@@ -17,92 +17,87 @@ class ChatPage extends StatelessWidget {
     ChatController chatController = Get.put(ChatController());
     return Padding(
       padding: const EdgeInsets.all(0),
-      child: Row(
-        children: [
-          Container(
-            width: 300,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10)),
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Colors.black12,
-                    Colors.white10,
-                  ],
-                )),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 50,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "CHAT",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: Colors.white60,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+          color: ColorList.none,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 300,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "CHAT",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: Colors.white60,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(130, 0, 8, 0),
-                        child: IconButton(
-                          onPressed: () {
-                            buildAddChatDialog(context);
-                          },
-                          icon: const Icon(
-                            Icons.add_box_outlined,
-                            size: 30,
-                            color: Colors.white60,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(130, 0, 8, 0),
+                          child: IconButton(
+                            onPressed: () {
+                              buildAddChatDialog(context);
+                            },
+                            icon: const Icon(
+                              Icons.add_box_outlined,
+                              size: 30,
+                              color: Colors.white60,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const ChatRoomListInterface(),
-              ],
-            ),
-          ),
-          Expanded(
-            child:
-                GetX<ChatController>(builder: (ChatController chatController) {
-              if (chatController.selected.value != "") {
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 50,
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Obx(() => Text(
-                              chatController.selectedChatRoom.value.name,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.lime,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )),
-                      ),
+                      ],
                     ),
-                    ChatPageV2(),
-                  ],
-                );
-              } else {
-                return Container();
-              }
-            }),
-          ),
-        ],
+                  ),
+                  const ChatRoomListInterface(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: GetX<ChatController>(
+                  builder: (ChatController chatController) {
+                if (chatController.selected.value != "") {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Obx(() => Text(
+                                chatController.selectedChatRoom.value.name,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.lime,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
+                        ),
+                      ),
+                      ChatPageV2(),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }
