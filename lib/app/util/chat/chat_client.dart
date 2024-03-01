@@ -17,18 +17,18 @@ class ChatClient {
     var accessToken = await tokenRepository.getAccessToken();
     log.info("[INIT] accessToken : $accessToken");
     if (accessToken != null && client == null) {
-      client = stompClient(accessToken);
+      client = await stompClient(accessToken);
       //client?.activate();
       client?.activate();
     }
   }
 
-  static StompClient stompClient(accessToken) {
+  static Future<StompClient> stompClient(accessToken) async {
     return StompClient(
       config: StompConfig.sockJS(
         url: 'http://localhost:8000/chat',
         stompConnectHeaders: {
-          "access_token": accessToken,
+          "access_token": await tokenRepository.getAccessToken(),
         },
         // beforeConnect: beforeConnect,
         onConnect: connect,

@@ -13,8 +13,11 @@ class AddChatRoomController extends GetxController {
   Future<void> onInit() async {
     log = Logger("chatRoomController");
     chatRoomRepository = ChatRoomRepository();
+    chatRoomNameController = TextEditingController();
     super.onInit();
   }
 
-  addChatRoom() {}
+  addChatRoom() {
+    var roomName = chatRoomNameController.text;
+  }
 }

@@ -33,4 +33,8 @@ class ChatRoomApi {
       return Future.error("[ChatApi] selectMyChatRoomList FAIL.");
     }
   }
+
+  addChatRoom() async {
+    var api = await getApi();
+  }
 }

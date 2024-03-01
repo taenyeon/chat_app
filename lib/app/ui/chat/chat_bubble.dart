@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/member/model/member.dart';
 import 'package:chat_app/app/util/time/time_util.dart';

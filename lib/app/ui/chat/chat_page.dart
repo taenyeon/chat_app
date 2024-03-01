@@ -9,6 +9,8 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'chat_page_v3.dart';
+
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
 
@@ -88,7 +90,7 @@ class ChatPage extends StatelessWidget {
                               )),
                         ),
                       ),
-                      ChatPageV2(),
+                      ChatPageV3(),
                     ],
                   );
                 } else {
@@ -195,7 +197,7 @@ class ChatRoomListInterface extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  chatRoomController.select(chatRoom.id);
+                  chatRoomController.selectChatRoom(chatRoom.id);
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

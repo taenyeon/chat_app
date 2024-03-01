@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: ThemeData().colorScheme.copyWith(
               primary: Colors.limeAccent,
-              background: const Color(0xff1c1c1c),
+              background: const Color(0xff1c1c1c).withOpacity(0.1),
             ),
         primarySwatch: Colors.lime,
         primaryColor: Colors.limeAccent,

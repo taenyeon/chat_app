@@ -8,7 +8,7 @@ class MemberController extends GetxController {
   late Logger log;
   late MemberRepository memberRepository;
 
-  RxList<Member> memberList = <Member>[].obs;
+  RxMap<int, Member> memberMap = <int, Member>{}.obs;
 
   @override
   void onInit() async {
@@ -16,7 +16,8 @@ class MemberController extends GetxController {
     memberRepository = MemberRepository();
 
     var list = await memberRepository.getMemberList();
-    memberList = list.obs;
+    var map = {for (var member in list) member.id: member};
+    memberMap.value = map;
     super.onInit();
   }
 }

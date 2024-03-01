@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 class ChatMessage {
-  late String id;
+  late String? id;
   late String roomId;
   late int memberId;
   late String payload;
