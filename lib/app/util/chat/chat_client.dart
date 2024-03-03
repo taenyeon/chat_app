@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chat_app/app/controller/chat_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/token/repository/token_repository.dart';
 import 'package:get/get.dart';
@@ -17,22 +18,24 @@ class ChatClient {
     var accessToken = await tokenRepository.getAccessToken();
     log.info("[INIT] accessToken : $accessToken");
     if (accessToken != null && client == null) {
-      client = await stompClient(accessToken);
+      client = await stompClient();
       //client?.activate();
       client?.activate();
     }
   }
 
-  static Future<StompClient> stompClient(accessToken) async {
+  static Future<StompClient> stompClient() async {
+    await Future.delayed(const Duration(milliseconds: 200));
     return StompClient(
       config: StompConfig.sockJS(
         url: 'http://localhost:8000/chat',
         stompConnectHeaders: {
           "access_token": await tokenRepository.getAccessToken(),
         },
-        // beforeConnect: beforeConnect,
+        beforeConnect: beforeConnect,
         onConnect: connect,
         onDisconnect: disconnect,
+        onStompError: onError,
       ),
     );
   }
@@ -51,14 +54,32 @@ class ChatClient {
     subscribe(frame);
   }
 
+  static onError(StompFrame frame) {
+    log.info("[ERROR] ${frame.headers}");
+    reconnect();
+  }
+
   static subscribe(StompFrame frame) {
+    var chatController = Get.put(ChatController());
     log.info("[SUBSCRIBE] URL : /sub/chat/${frame.headers['user-name']}");
     client?.subscribe(
-      destination: "/sub/chat/${frame.headers['user-name']}",
-      callback: (res) => {
-        Get.snackbar("RECEIVE MESSAGE", res.body!),
-      },
-    );
+        destination: "/sub/chat/${frame.headers['user-name']}",
+        callback: (res) {
+          if (res.body != null) {
+            var json = jsonDecode(res.body!);
+            ChatMessage chatMessage = ChatMessage.fromJson(json);
+            if (chatController.selectedChatRoom.value.id ==
+                chatMessage.roomId) {
+              chatController.addMessage(chatMessage);
+            } else {
+              chatController.addNotiMessage(chatMessage);
+            }
+          }
+        });
+  }
+
+  static reconnect() async {
+    client = await stompClient();
   }
 
   static send(ChatMessage message) async {

@@ -212,7 +212,7 @@ class ChatRoomListInterface extends StatelessWidget {
                       ),
                     ),
                     const Text(
-                      "by",
+                      "",
                       style: TextStyle(
                         color: Colors.white60,
                         fontSize: 12,

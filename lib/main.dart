@@ -1,6 +1,5 @@
 import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/log/logging_util.dart';
-import 'package:chat_app/app/util/time/time_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,9 +11,13 @@ import 'dart:io';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+
   settingLogger();
-  await settingDesktopMinSize();
+
+  if (!kIsWeb) await settingDesktopMinSize();
+
   ChatClient.init();
+
   runApp(const MyApp());
 }
 
@@ -34,9 +37,8 @@ void settingLogger() {
 }
 
 Future<void> settingDesktopMinSize() async {
-  await windowManager.ensureInitialized();
-
   if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+    await windowManager.ensureInitialized();
     WindowManager.instance.setMinimumSize(const Size(800, 600));
   }
 }

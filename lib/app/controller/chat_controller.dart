@@ -1,6 +1,7 @@
 import 'package:chat_app/app/controller/base_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/chat/model/chat_room.dart';
+import 'package:chat_app/app/data/chat/repository/chat_message_repository.dart';
 import 'package:chat_app/app/data/chat/repository/chat_room_repository.dart';
 import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/color/color_list.dart';
@@ -11,11 +12,16 @@ import 'package:logging/logging.dart';
 class ChatController extends GetxController {
   late Logger log;
   late ChatRoomRepository chatRoomRepository;
+  late ChatMessageRepository chatMessageRepository;
 
   RxString selected = "".obs;
   Rx<ChatRoom> selectedChatRoom = ChatRoom().obs;
   RxList chatRoomList = [].obs;
   RxList chatMessages = [].obs;
+  RxMap<String, List<ChatMessage>> notiMessages =
+      <String, List<ChatMessage>>{}.obs;
+
+  RxInt notiMessagesCount = 0.obs;
 
   late TextEditingController messagePayloadController;
 
@@ -24,6 +30,7 @@ class ChatController extends GetxController {
     log = Logger("chatRoomController");
     chatRoomRepository = ChatRoomRepository();
     messagePayloadController = TextEditingController();
+    chatMessageRepository = ChatMessageRepository();
     await loadMyChatRoom();
     super.onInit();
   }
@@ -48,10 +55,30 @@ class ChatController extends GetxController {
         chatRoomList[i] = chatRoom;
       }
     }
+    await selectMessageByRoomId();
   }
 
   void addTextNewLine() {
     messagePayloadController.text = "${messagePayloadController.text}\n";
+  }
+
+  selectMessageByRoomId() async {
+    var roomId = selectedChatRoom.value.id;
+    chatMessages.value =
+        await chatMessageRepository.getChatMessageByRoomId(roomId);
+  }
+
+  addMessage(ChatMessage chatMessage) {
+    chatMessages.value = [...chatMessages, chatMessage];
+  }
+
+  addNotiMessage(ChatMessage chatMessage) {
+    notiMessages[chatMessage.roomId] = [
+      ...?notiMessages[chatMessage.roomId],
+      chatMessage
+    ];
+
+    notiMessagesCount++;
   }
 
   void sendMessage() {
@@ -64,7 +91,7 @@ class ChatController extends GetxController {
       "roomId": selectedChatRoom.value.id,
       "memberId": userController.user.value.id,
       "payload": payload,
-      "createdAt": DateTime.now().millisecond,
+      "createdAt": DateTime.now().millisecondsSinceEpoch
     });
 
     ChatClient.send(message);

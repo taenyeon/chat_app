@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class ChatMessage {
   late String? id;
   late String roomId;

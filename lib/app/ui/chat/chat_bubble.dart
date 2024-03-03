@@ -8,8 +8,6 @@ class ChatBubble extends StatelessWidget {
   final ChatMessage message;
   final Member member;
   final bool isUser;
-  final double bubbleHeight;
-  final double bubbleWidth;
   final BoxDecoration bubbleDecoration;
   final TextStyle messagePayloadTextStyle;
   final EdgeInsets messagePayloadPadding;
@@ -24,8 +22,6 @@ class ChatBubble extends StatelessWidget {
     required this.member,
     required this.messagePayloadTextStyle,
     required this.bubbleDecoration,
-    required this.bubbleHeight,
-    required this.bubbleWidth,
     required this.isUser,
     required this.messageMemberNameTextStyle,
     required this.messageCreatedAtTextStyle,
@@ -37,33 +33,49 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Alignment align = Alignment.centerLeft;
-    if (isUser) align = Alignment.centerRight;
+    CrossAxisAlignment bubbleAlignment = CrossAxisAlignment.start;
+    if (isUser) {
+      align = Alignment.centerRight;
+      bubbleAlignment = CrossAxisAlignment.end;
+    }
     return Align(
       alignment: align,
-      child: Container(
-        height: bubbleHeight,
-        width: bubbleWidth,
-        decoration: bubbleDecoration,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (!isUser)
-                Text(
-                  member.name,
-                  style: messageMemberNameTextStyle,
-                ),
-              Text(
-                message.payload,
-                style: messagePayloadTextStyle,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: bubbleAlignment,
+        children: [
+          if (!isUser)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 5),
+              child: Text(
+                member.name,
+                style: messageMemberNameTextStyle,
               ),
-              Text(
-                TimeUtil.dateFormat(message.createdAt),
-                style: messageCreatedAtTextStyle,
+            ),
+          Container(
+            decoration: bubbleDecoration,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    message.payload,
+                    style: messagePayloadTextStyle,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              TimeUtil.dateFormat(message.createdAt),
+              style: messageCreatedAtTextStyle,
+            ),
+          ),
+        ],
       ),
     );
   }

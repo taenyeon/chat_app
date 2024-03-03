@@ -21,24 +21,27 @@ class ChatPageV3 extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: chatController.chatMessages.length,
-              itemBuilder: (context, index) {
-                ChatMessage chatMessage = chatController.chatMessages[index];
+            child: Obx(
+              () => ListView.builder(
+                scrollDirection: Axis.vertical,
+                physics: const AlwaysScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: chatController.chatMessages.length,
+                itemBuilder: (context, index) {
+                  ChatMessage chatMessage = chatController.chatMessages[index];
 
-                bool isUser = false;
+                  bool isUser = false;
 
-                var userId = userController.user.value.id;
-                int memberId = chatMessage.memberId;
+                  var userId = userController.user.value.id;
+                  int memberId = chatMessage.memberId;
 
-                Member member = memberController.memberMap[memberId]!;
+                  Member member = memberController.memberMap[memberId]!;
 
-                if (userId == memberId) isUser = true;
+                  if (userId == memberId) isUser = true;
 
-                return buildChatBubble(chatMessage, member, isUser);
-              },
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
+                  return buildChatBubble(chatMessage, member, isUser);
+                },
+              ),
             ),
           ),
           Container(
@@ -113,34 +116,34 @@ class ChatPageV3 extends StatelessWidget {
     );
   }
 
-  Obx buildChatBubble(ChatMessage chatMessage, Member member, bool isUser) {
-    return Obx(() {
-      return ChatBubble(
+  buildChatBubble(ChatMessage chatMessage, Member member, bool isUser) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ChatBubble(
+        isUser: isUser,
         message: chatMessage,
         member: member,
-        messagePayloadTextStyle: const TextStyle(
-          color: Colors.white,
-          fontSize: 14,
-        ),
         bubbleDecoration: BoxDecoration(
           color: Colors.black26,
           borderRadius: BorderRadius.circular(10),
         ),
-        bubbleHeight: 100,
-        bubbleWidth: 100,
-        isUser: isUser,
+        messagePayloadTextStyle: const TextStyle(
+          color: Colors.grey,
+          fontSize: 14,
+        ),
         messageMemberNameTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 14,
+          fontWeight: FontWeight.bold,
         ),
         messageCreatedAtTextStyle: const TextStyle(
-          color: Colors.white,
+          color: Colors.grey,
           fontSize: 14,
         ),
         messagePayloadPadding: const EdgeInsets.all(3),
         messageMemberNamePadding: const EdgeInsets.all(3),
         messageCreatedAtPadding: const EdgeInsets.all(3),
-      );
-    });
+      ),
+    );
   }
 }

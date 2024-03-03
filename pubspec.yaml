@@ -32,7 +32,7 @@ dependencies:
   uuid:
   bubble:
   intl:
-    
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
