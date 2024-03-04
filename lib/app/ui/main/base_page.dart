@@ -273,27 +273,44 @@ class MenuBar extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
-          child: SizedBox(
-            width: 50,
-            height: 50,
-            child: IconButton(
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all(menuInfo.backgroundColor),
-                foregroundColor: MaterialStateProperty.all(menuInfo.color),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+          child: Stack(
+            children: [
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: IconButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(menuInfo.backgroundColor),
+                    foregroundColor: MaterialStateProperty.all(menuInfo.color),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                   ),
+                  onPressed: () {
+                    menuController.select(menuInfo.name);
+                  },
+                  icon: menuInfo.icon,
+                  color: Colors.white38,
+                  iconSize: 25,
                 ),
               ),
-              onPressed: () {
-                menuController.select(menuInfo.name);
-              },
-              icon: menuInfo.icon,
-              color: Colors.white38,
-              iconSize: 25,
-            ),
+              if (menuInfo.hasNoti)
+                Positioned(
+                  top: 3,
+                  right: 3,
+                  child: Container(
+                    width: 10,
+                    height: 10,
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                )
+            ],
           ),
         ),
         Text(

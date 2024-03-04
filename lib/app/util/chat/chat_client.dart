@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chat_app/app/controller/base_controller.dart';
 import 'package:chat_app/app/controller/chat_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/token/repository/token_repository.dart';
@@ -61,6 +62,7 @@ class ChatClient {
 
   static subscribe(StompFrame frame) {
     var chatController = Get.put(ChatController());
+    var baseController = Get.put(BaseController());
     log.info("[SUBSCRIBE] URL : /sub/chat/${frame.headers['user-name']}");
     client?.subscribe(
         destination: "/sub/chat/${frame.headers['user-name']}",

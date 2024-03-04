@@ -11,6 +11,9 @@ import 'package:logging/logging.dart';
 
 class ChatController extends GetxController {
   late Logger log;
+
+  late ScrollController scrollController;
+
   late ChatRoomRepository chatRoomRepository;
   late ChatMessageRepository chatMessageRepository;
 
@@ -20,14 +23,16 @@ class ChatController extends GetxController {
   RxList chatMessages = [].obs;
   RxMap<String, List<ChatMessage>> notiMessages =
       <String, List<ChatMessage>>{}.obs;
-
   RxInt notiMessagesCount = 0.obs;
+
+  RxBool goBottom = true.obs;
 
   late TextEditingController messagePayloadController;
 
   @override
   Future<void> onInit() async {
     log = Logger("chatRoomController");
+    scrollController = ScrollController();
     chatRoomRepository = ChatRoomRepository();
     messagePayloadController = TextEditingController();
     chatMessageRepository = ChatMessageRepository();
@@ -70,6 +75,8 @@ class ChatController extends GetxController {
 
   addMessage(ChatMessage chatMessage) {
     chatMessages.value = [...chatMessages, chatMessage];
+    goBottom.value = true;
+    // goUnder();
   }
 
   addNotiMessage(ChatMessage chatMessage) {
@@ -95,6 +102,13 @@ class ChatController extends GetxController {
     });
 
     ChatClient.send(message);
+
     messagePayloadController.text = "";
+  }
+
+  void goUnder() {
+    scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOutSine);
   }
 }

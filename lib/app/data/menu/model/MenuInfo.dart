@@ -6,7 +6,13 @@ class MenuInfo {
   bool isSelected = false;
   Color backgroundColor = Colors.white12;
   Color color = Colors.white38;
-  Icon icon = const Icon(Icons.abc);
+  Icon icon = const Icon(
+    Icons.abc,
+    color: Colors.white38,
+    size: 25,
+  );
+
+  bool hasNoti = false;
 
   MenuInfo(
     this.name,
@@ -15,6 +21,7 @@ class MenuInfo {
     this.color,
     this.icon,
     this.backgroundColor,
+    this.hasNoti,
   );
 
   MenuInfo.fromJson(Map<String, dynamic> json) {
@@ -24,6 +31,7 @@ class MenuInfo {
     color = json['color'];
     icon = json['icon'];
     backgroundColor = json['backgroundColor'];
+    hasNoti = false;
   }
 
   toJson() => <String, dynamic>{
@@ -33,5 +41,6 @@ class MenuInfo {
         "color": color,
         "icon": icon,
         "backgroundColor": backgroundColor,
+        "hasNoti": hasNoti,
       };
 }

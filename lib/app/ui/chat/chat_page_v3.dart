@@ -23,11 +23,21 @@ class ChatPageV3 extends StatelessWidget {
           Expanded(
             child: Obx(
               () => ListView.builder(
+                controller: chatController.scrollController,
                 scrollDirection: Axis.vertical,
                 physics: const AlwaysScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: chatController.chatMessages.length,
                 itemBuilder: (context, index) {
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    if (chatController.goBottom.isTrue) {
+                      chatController.goUnder();
+                      if (index + 1 == chatController.chatMessages.length) {
+                        chatController.goBottom.value = false;
+                      }
+                    }
+                  });
+
                   ChatMessage chatMessage = chatController.chatMessages[index];
 
                   bool isUser = false;
@@ -67,28 +77,7 @@ class ChatPageV3 extends StatelessWidget {
                       ),
                       maxLines: null,
                       expands: false,
-                      focusNode: FocusNode(
-                        onKeyEvent: (node, event) {
-                          var enterPressed = event is KeyDownEvent &&
-                              event.physicalKey == PhysicalKeyboardKey.enter;
-                          var shiftPressed = HardwareKeyboard
-                              .instance.physicalKeysPressed
-                              .any((element) => <PhysicalKeyboardKey>{
-                                    PhysicalKeyboardKey.shiftLeft,
-                                    PhysicalKeyboardKey.shiftRight,
-                                  }.contains(element));
-
-                          if (enterPressed) {
-                            if (shiftPressed) {
-                              chatController.addTextNewLine();
-                              return KeyEventResult.handled;
-                            }
-                            chatController.sendMessage();
-                            return KeyEventResult.handled;
-                          }
-                          return KeyEventResult.ignored;
-                        },
-                      ),
+                      focusNode: buildInputFocusNode(chatController),
                       onFieldSubmitted: (value) {
                         chatController.sendMessage();
                       },
@@ -116,6 +105,30 @@ class ChatPageV3 extends StatelessWidget {
     );
   }
 
+  FocusNode buildInputFocusNode(ChatController chatController) {
+    return FocusNode(
+      onKeyEvent: (node, event) {
+        var enterPressed = event is KeyDownEvent &&
+            event.physicalKey == PhysicalKeyboardKey.enter;
+        var shiftPressed = HardwareKeyboard.instance.physicalKeysPressed
+            .any((element) => <PhysicalKeyboardKey>{
+                  PhysicalKeyboardKey.shiftLeft,
+                  PhysicalKeyboardKey.shiftRight,
+                }.contains(element));
+
+        if (enterPressed) {
+          if (shiftPressed) {
+            chatController.addTextNewLine();
+            return KeyEventResult.handled;
+          }
+          chatController.sendMessage();
+          return KeyEventResult.handled;
+        }
+        return KeyEventResult.ignored;
+      },
+    );
+  }
+
   buildChatBubble(ChatMessage chatMessage, Member member, bool isUser) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -128,7 +141,7 @@ class ChatPageV3 extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         messagePayloadTextStyle: const TextStyle(
-          color: Colors.grey,
+          color: Colors.white70,
           fontSize: 14,
         ),
         messageMemberNameTextStyle: const TextStyle(
