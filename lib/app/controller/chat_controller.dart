@@ -21,9 +21,9 @@ class ChatController extends GetxController {
   Rx<ChatRoom> selectedChatRoom = ChatRoom().obs;
   RxList chatRoomList = [].obs;
   RxList chatMessages = [].obs;
-  RxMap<String, List<ChatMessage>> notiMessages =
-      <String, List<ChatMessage>>{}.obs;
-  RxInt notiMessagesCount = 0.obs;
+
+  RxMap<String, RxList<ChatMessage>> notiMessages =
+      <String, RxList<ChatMessage>>{}.obs;
 
   RxBool goBottom = true.obs;
 
@@ -59,8 +59,9 @@ class ChatController extends GetxController {
         }
         chatRoomList[i] = chatRoom;
       }
+      notiMessages[selected.value] = <ChatMessage>[].obs;
+      await selectMessageByRoomId();
     }
-    await selectMessageByRoomId();
   }
 
   void addTextNewLine() {
@@ -74,18 +75,18 @@ class ChatController extends GetxController {
   }
 
   addMessage(ChatMessage chatMessage) {
+    log.info("addMessage");
     chatMessages.value = [...chatMessages, chatMessage];
     goBottom.value = true;
     // goUnder();
   }
 
   addNotiMessage(ChatMessage chatMessage) {
+    log.info("addNotiMessage");
     notiMessages[chatMessage.roomId] = [
       ...?notiMessages[chatMessage.roomId],
-      chatMessage
-    ];
-
-    notiMessagesCount++;
+      chatMessage,
+    ].obs;
   }
 
   void sendMessage() {
@@ -108,7 +109,6 @@ class ChatController extends GetxController {
 
   void goUnder() {
     scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOutSine);
+        duration: const Duration(milliseconds: 5), curve: Curves.easeInOutSine);
   }
 }

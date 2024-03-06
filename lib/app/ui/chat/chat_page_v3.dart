@@ -63,38 +63,67 @@ class ChatPageV3 extends StatelessWidget {
               color: Colors.white10,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(2.0),
               child: Column(
                 children: [
                   ConstrainedBox(
                     constraints: const BoxConstraints(
-                      maxHeight: 100,
+                      maxHeight: 70,
+                      minHeight: 70,
                     ),
-                    child: TextFormField(
-                      controller: chatController.messagePayloadController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                      maxLines: null,
-                      expands: false,
-                      focusNode: buildInputFocusNode(chatController),
-                      onFieldSubmitted: (value) {
-                        chatController.sendMessage();
-                      },
-                      style: const TextStyle(
-                        color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: TextFormField(
+                        controller: chatController.messagePayloadController,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        maxLines: null,
+                        expands: false,
+                        focusNode: buildInputFocusNode(chatController),
+                        onFieldSubmitted: (value) {
+                          chatController.sendMessage();
+                        },
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.send,
-                        color: Colors.limeAccent,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.file_open_outlined,
+                                size: 20,
+                                color: Colors.grey,
+                              )),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.emoji_emotions_outlined,
+                                size: 20,
+                                color: Colors.grey,
+                              )),
+                        ],
                       ),
-                    ),
+                      IconButton(
+                        onPressed: () {
+                          chatController.sendMessage();
+                        },
+                        icon: const Icon(
+                          Icons.send,
+                          size: 20,
+                          color: Colors.limeAccent,
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

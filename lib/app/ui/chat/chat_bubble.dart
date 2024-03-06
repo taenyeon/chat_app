@@ -39,6 +39,8 @@ class ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     Alignment align = Alignment.centerLeft;
     CrossAxisAlignment bubbleAlignment = CrossAxisAlignment.start;
+    MainAxisAlignment mainAxisAlignment =
+        isUser ? MainAxisAlignment.end : MainAxisAlignment.start;
 
     String? url = ValidateUtil.getUrl(message.payload);
 
@@ -54,28 +56,54 @@ class ChatBubble extends StatelessWidget {
         children: [
           if (!isUser)
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 5),
+              padding: const EdgeInsets.fromLTRB(50, 0, 10, 5),
               child: Text(
                 member.name,
                 style: messageMemberNameTextStyle,
               ),
             ),
-          Container(
-            decoration: bubbleDecoration,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildPayload(message.payload, url),
-                ],
+          Row(
+            mainAxisAlignment: mainAxisAlignment,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!isUser)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Center(
+                      child: member.profileUrl != null
+                          ? Image.network(
+                              member.profileUrl!,
+                              fit: BoxFit.cover,
+                            )
+                          : Text(member.name.toUpperCase()[0]),
+                    ),
+                  ),
+                ),
+              Container(
+                decoration: bubbleDecoration,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildPayload(message.payload, url),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
           if (url != null && url.isNotEmpty) buildLinkPreview(url),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(50, 8, 0, 8),
             child: Text(
               TimeUtil.dateFormat(message.createdAt),
               style: messageCreatedAtTextStyle,
@@ -87,32 +115,35 @@ class ChatBubble extends StatelessWidget {
   }
 
   Widget buildPayload(String payload, String? url) {
-    return EasyRichText(
-      payload,
-      defaultStyle: messagePayloadTextStyle,
-      selectable: true,
-      patternList: [
-        if (url != null)
-          EasyRichTextPattern(
-            targetString: url,
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                launchUrl(Uri.parse(url));
-              },
-            prefixInlineSpan: const WidgetSpan(
-                child: Icon(
-              Icons.insert_link_outlined,
-              color: Colors.blue,
-              size: 14,
-            )),
-            hasSpecialCharacters: true,
-            style: const TextStyle(
-              color: Colors.blue,
-              decoration: TextDecoration.underline,
-              decorationColor: Colors.blue,
-            ),
-          )
-      ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: 250),
+      child: EasyRichText(
+        payload,
+        defaultStyle: messagePayloadTextStyle,
+        selectable: true,
+        patternList: [
+          if (url != null)
+            EasyRichTextPattern(
+              targetString: url,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  launchUrl(Uri.parse(url));
+                },
+              prefixInlineSpan: const WidgetSpan(
+                  child: Icon(
+                Icons.insert_link_outlined,
+                color: Colors.blue,
+                size: 14,
+              )),
+              hasSpecialCharacters: true,
+              style: const TextStyle(
+                color: Colors.blue,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.blue,
+              ),
+            )
+        ],
+      ),
     );
   }
 
@@ -120,7 +151,9 @@ class ChatBubble extends StatelessWidget {
     Alignment errorAlignment = Alignment.centerLeft;
     if (isUser) errorAlignment = Alignment.centerRight;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+      padding: isUser
+          ? const EdgeInsets.fromLTRB(0, 5, 0, 0)
+          : const EdgeInsets.fromLTRB(50, 5, 0, 0),
       child: SizedBox(
         width: 250,
         child: AnyLinkPreview(

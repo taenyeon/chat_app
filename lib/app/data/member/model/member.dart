@@ -5,6 +5,7 @@ class Member {
   late String phoneNumber;
   late String createdAt;
   late String updatedAt;
+  String? profileUrl;
 
   Member({id, username, name, phoneNumber, createdAt, updatedAt});
 

@@ -8,6 +8,7 @@ import 'package:chat_bubbles/bubbles/bubble_normal.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logging/logging.dart';
 
 import 'chat_page_v3.dart';
 
@@ -172,15 +173,15 @@ class ChatRoomListInterface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ChatController chatRoomController = Get.put(ChatController());
+    ChatController chatController = Get.put(ChatController());
     return Expanded(
       child: Obx(
         () => ListView.builder(
-          itemCount: chatRoomController.chatRoomList.length,
+          itemCount: chatController.chatRoomList.length,
           shrinkWrap: true,
           physics: const PageScrollPhysics(),
           itemBuilder: (context, index) {
-            ChatRoom chatRoom = chatRoomController.chatRoomList[index];
+            ChatRoom chatRoom = chatController.chatRoomList[index];
             return Container(
               width: 100,
               height: 60,
@@ -197,27 +198,57 @@ class ChatRoomListInterface extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  chatRoomController.selectChatRoom(chatRoom.id);
+                  chatController.selectChatRoom(chatRoom.id);
                 },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      chatRoom.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          chatRoom.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Text(
+                          "",
+                          style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
-                    const Text(
-                      "",
-                      style: TextStyle(
-                        color: Colors.white60,
-                        fontSize: 12,
-                      ),
-                    ),
+                    Obx(() {
+                      if (chatController.notiMessages
+                              .containsKey(chatRoom.id) &&
+                          chatController
+                              .notiMessages[chatRoom.id]!.isNotEmpty) {
+                        return Container(
+                          width: 15,
+                          height: 15,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              chatController.notiMessages[chatRoom.id]!.length
+                                  .toString(),
+                              style:
+                                  TextStyle(fontSize: 10, color: Colors.white),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    }),
                   ],
                 ),
               ),
