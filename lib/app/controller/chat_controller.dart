@@ -5,6 +5,7 @@ import 'package:chat_app/app/data/chat/repository/chat_message_repository.dart';
 import 'package:chat_app/app/data/chat/repository/chat_room_repository.dart';
 import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/color/color_list.dart';
+import 'package:chat_app/app/util/time/time_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';

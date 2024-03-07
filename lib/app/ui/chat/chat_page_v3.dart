@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../util/time/time_util.dart';
+
 class ChatPageV3 extends StatelessWidget {
   const ChatPageV3({super.key});
 
@@ -17,121 +19,168 @@ class ChatPageV3 extends StatelessWidget {
     var chatController = Get.put(ChatController());
     var memberController = Get.put(MemberController());
     var userController = Get.put(BaseController());
+
     return Expanded(
-      child: Column(
-        children: [
-          Expanded(
-            child: Obx(
-              () => ListView.builder(
-                controller: chatController.scrollController,
-                scrollDirection: Axis.vertical,
-                physics: const AlwaysScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: chatController.chatMessages.length,
-                itemBuilder: (context, index) {
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                    if (chatController.goBottom.isTrue) {
-                      chatController.goUnder();
-                      if (index + 1 == chatController.chatMessages.length) {
-                        chatController.goBottom.value = false;
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Column(
+          children: [
+            Expanded(
+              child: Obx(
+                () => ListView.builder(
+                  controller: chatController.scrollController,
+                  scrollDirection: Axis.vertical,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: chatController.chatMessages.length,
+                  itemBuilder: (context, index) {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      if (chatController.goBottom.isTrue) {
+                        chatController.goUnder();
+                        if (index + 1 == chatController.chatMessages.length) {
+                          chatController.goBottom.value = false;
+                        }
                       }
-                    }
-                  });
+                    });
 
-                  ChatMessage chatMessage = chatController.chatMessages[index];
+                    ChatMessage chatMessage =
+                        chatController.chatMessages[index];
 
-                  bool isUser = false;
+                    bool isUser = false;
 
-                  var userId = userController.user.value.id;
-                  int memberId = chatMessage.memberId;
+                    var userId = userController.user.value.id;
+                    int memberId = chatMessage.memberId;
 
-                  Member member = memberController.memberMap[memberId]!;
+                    Member member = memberController.memberMap[memberId]!;
 
-                  if (userId == memberId) isUser = true;
+                    if (userId == memberId) isUser = true;
 
-                  return buildChatBubble(chatMessage, member, isUser);
-                },
-              ),
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-              ),
-              color: Colors.white10,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Column(
-                children: [
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 70,
-                      minHeight: 70,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: TextFormField(
-                        controller: chatController.messagePayloadController,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        maxLines: null,
-                        expands: false,
-                        focusNode: buildInputFocusNode(chatController),
-                        onFieldSubmitted: (value) {
-                          chatController.sendMessage();
-                        },
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                    if (index != 0 &&
+                        TimeUtil.dateFormatYYYYMMDD(chatController
+                                .chatMessages[index - 1].createdAt) ==
+                            TimeUtil.dateFormatYYYYMMDD(
+                                chatMessage.createdAt)) {
+                      return buildChatBubble(chatMessage, member, isUser);
+                    } else {
+                      return Column(
                         children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.file_open_outlined,
-                                size: 20,
-                                color: Colors.grey,
-                              )),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.emoji_emotions_outlined,
-                                size: 20,
-                                color: Colors.grey,
-                              )),
+                          buildChatDateDivider(chatMessage),
+                          buildChatBubble(chatMessage, member, isUser),
                         ],
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          chatController.sendMessage();
-                        },
-                        icon: const Icon(
-                          Icons.send,
-                          size: 20,
-                          color: Colors.limeAccent,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
+                      );
+                    }
+                  },
+                ),
               ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white10,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Column(
+                    children: [
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 70,
+                          minHeight: 70,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: TextFormField(
+                            controller: chatController.messagePayloadController,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                            maxLines: null,
+                            expands: false,
+                            focusNode: buildInputFocusNode(chatController),
+                            onFieldSubmitted: (value) {
+                              chatController.sendMessage();
+                            },
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.file_open_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  )),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.emoji_emotions_outlined,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  )),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              chatController.sendMessage();
+                            },
+                            icon: const Icon(
+                              Icons.send,
+                              size: 20,
+                              color: Colors.limeAccent,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  Stack buildChatDateDivider(ChatMessage chatMessage) {
+    return Stack(alignment: Alignment.center, children: [
+      const Divider(
+        color: Colors.limeAccent,
+        thickness: 0.5,
+        indent: 10,
+        endIndent: 10,
+      ),
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.limeAccent,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: Text(
+            TimeUtil.dateFormatYYYYMMDD(chatMessage.createdAt),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: 11,
+            ),
+          ),
+        ),
+      ),
+    ]);
   }
 
   FocusNode buildInputFocusNode(ChatController chatController) {
@@ -180,7 +229,7 @@ class ChatPageV3 extends StatelessWidget {
         ),
         messageCreatedAtTextStyle: const TextStyle(
           color: Colors.grey,
-          fontSize: 14,
+          fontSize: 12,
         ),
         messagePayloadPadding: const EdgeInsets.all(3),
         messageMemberNamePadding: const EdgeInsets.all(3),

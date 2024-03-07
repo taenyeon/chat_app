@@ -50,40 +50,40 @@ class ChatBubble extends StatelessWidget {
     }
     return Align(
       alignment: align,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: bubbleAlignment,
+      child: Row(
+        mainAxisAlignment: mainAxisAlignment,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isUser)
             Padding(
-              padding: const EdgeInsets.fromLTRB(50, 0, 10, 5),
-              child: Text(
-                member.name,
-                style: messageMemberNameTextStyle,
+              padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
+              child: Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Center(
+                  child: member.profileUrl != null
+                      ? Image.network(
+                          member.profileUrl!,
+                          fit: BoxFit.cover,
+                        )
+                      : Text(member.name.toUpperCase()[0]),
+                ),
               ),
             ),
-          Row(
-            mainAxisAlignment: mainAxisAlignment,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: bubbleAlignment,
             children: [
               if (!isUser)
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(
-                      child: member.profileUrl != null
-                          ? Image.network(
-                              member.profileUrl!,
-                              fit: BoxFit.cover,
-                            )
-                          : Text(member.name.toUpperCase()[0]),
-                    ),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 10, 3),
+                  child: Text(
+                    member.name,
+                    style: messageMemberNameTextStyle,
                   ),
                 ),
               Container(
@@ -99,15 +99,15 @@ class ChatBubble extends StatelessWidget {
                   ),
                 ),
               ),
+              if (url != null && url.isNotEmpty) buildLinkPreview(url),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 5, 5, 8),
+                child: Text(
+                  TimeUtil.dateFormatHHMM(message.createdAt),
+                  style: messageCreatedAtTextStyle,
+                ),
+              ),
             ],
-          ),
-          if (url != null && url.isNotEmpty) buildLinkPreview(url),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(50, 8, 0, 8),
-            child: Text(
-              TimeUtil.dateFormat(message.createdAt),
-              style: messageCreatedAtTextStyle,
-            ),
           ),
         ],
       ),
@@ -195,5 +195,9 @@ class ChatBubble extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget test() {
+    return GestureDetector();
   }
 }
