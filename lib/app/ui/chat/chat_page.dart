@@ -109,12 +109,12 @@ class ChatPage extends StatelessWidget {
       ChatMessage chatMessage, BaseController baseController) {
     if (chatMessage.memberId == baseController.user.value.id) {
       return BubbleNormal(
-        text: chatMessage.payload,
+        text: chatMessage.payload!,
         isSender: true,
       );
     } else {
       return BubbleNormal(
-        text: chatMessage.payload,
+        text: chatMessage.payload!,
         isSender: false,
       );
     }

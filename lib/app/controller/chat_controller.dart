@@ -6,6 +6,7 @@ import 'package:chat_app/app/data/chat/repository/chat_room_repository.dart';
 import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/color/color_list.dart';
 import 'package:chat_app/app/util/time/time_util.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';
@@ -100,12 +101,20 @@ class ChatController extends GetxController {
       "roomId": selectedChatRoom.value.id,
       "memberId": userController.user.value.id,
       "payload": payload,
+      "type": "TEXT",
       "createdAt": DateTime.now().millisecondsSinceEpoch
     });
 
     ChatClient.send(message);
 
     messagePayloadController.text = "";
+  }
+
+  void sendFile() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.any);
+
+    chatMessageRepository.sendFile(selectedChatRoom.value.id, result!);
   }
 
   void goUnder() {

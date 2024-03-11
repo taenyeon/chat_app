@@ -16,7 +16,6 @@ dependencies:
   dio:
   flutter_secure_storage:
   shared_preferences:
-  google_fonts:
   logging:
   change_app_package_name:
   stomp_dart_client:
@@ -35,6 +34,7 @@ dependencies:
   any_link_preview:
   easy_rich_text:
   url_launcher:
+  photo_view:
 
 dev_dependencies:
   flutter_test:

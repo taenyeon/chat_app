@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/app/route/route.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 import 'dart:io';
@@ -63,12 +62,7 @@ class MyApp extends StatelessWidget {
             ),
         primarySwatch: Colors.lime,
         primaryColor: Colors.limeAccent,
-        textTheme: TextTheme(
-          headlineSmall: GoogleFonts.exo2(
-              color: Colors.limeAccent,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
-        ),
+        textTheme: TextTheme(),
       ),
       initialRoute: '/',
       getPages: AppPages.routes,

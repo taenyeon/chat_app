@@ -2,7 +2,8 @@ class ChatMessage {
   late String? id;
   late String roomId;
   late int memberId;
-  late String payload;
+  late String type;
+  late String? payload;
   late int createdAt;
 
   ChatMessage({id, roomId, memberId, payload, issuedDateTime});
@@ -13,6 +14,7 @@ class ChatMessage {
     memberId = json['memberId'];
     payload = json['payload'];
     createdAt = json['createdAt'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -22,6 +24,7 @@ class ChatMessage {
     data['memberId'] = memberId;
     data['payload'] = payload;
     data['createdAt'] = createdAt;
+    data['type'] = type;
     return data;
   }
 

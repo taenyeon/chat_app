@@ -65,7 +65,7 @@ SPEC CHECKSUMS:
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
-  webview_flutter_wkwebview: aac3530785a88ca4c680f6749d7f4f88251b4d27
+  webview_flutter_wkwebview: 2c8b40f495d66b1e5ec47a1b6c8ce9eac42e5947
   window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8
 
 PODFILE CHECKSUM: 353c8bcc5d5b0994e508d035b5431cfe18c1dea7

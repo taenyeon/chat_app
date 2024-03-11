@@ -24,12 +24,19 @@ Future<Dio> baseApi() async {
         if (accessToken != null) {
           option.headers['access_token'] = accessToken;
         }
+        String? prettyJson = "";
+        try {
+          prettyJson = LoggingUtil.getPrettyJson(option.data);
+        } catch (e) {
+          prettyJson = "FILE";
+        }
+
         // REQUEST LOG
         log.info("\n[\x1B[34mREQUEST\x1B[0m]\n\n"
             "method : ${option.method}\n"
             "url : ${option.uri}\n\n"
             "headers : \n${LoggingUtil.getPrettyString(option.headers)}\n"
-            "data : ${LoggingUtil.getPrettyJson(option.data)}\n"
+            "data : $prettyJson\n"
             "queryParams : ${option.queryParameters}\n\n"
             "extra : ${option.extra}\n\n");
         // RETURN

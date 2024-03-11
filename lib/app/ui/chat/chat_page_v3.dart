@@ -116,7 +116,9 @@ class ChatPageV3 extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    chatController.sendFile();
+                                  },
                                   icon: const Icon(
                                     Icons.file_open_outlined,
                                     size: 20,
