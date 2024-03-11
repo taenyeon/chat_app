@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 class ChatBubble extends StatelessWidget {
   final ChatMessage message;
@@ -145,35 +147,47 @@ class ChatBubble extends StatelessWidget {
             ),
           );
         }
-      case "IMAGE":
+      case "FILE":
         {
-          return ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 250),
-            child: GestureDetector(
-              onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return PhotoView(
-                        imageProvider: NetworkImage(message.payload!),
-                        initialScale: 1.0,
-                        maxScale: 3.0,
-                        backgroundDecoration: const BoxDecoration(
-                          color: Colors.white10,
-                        ),
-                      );
-                    });
-              },
-              child: Container(
-                height: 250,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: NetworkImage(message.payload!)),
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          bool isImage = ValidateUtil.isImage(message.payload!);
+          if (isImage) {
+            return ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 250),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PhotoView(
+                          imageProvider: NetworkImage(message.payload!),
+                          initialScale: 1.0,
+                          maxScale: 3.0,
+                          backgroundDecoration: const BoxDecoration(
+                            color: Colors.white10,
+                          ),
+                        );
+                      });
+                },
+                child: Container(
+                  height: 250,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(message.payload!)),
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          } else {
+            return ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 250),
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.file_present_outlined),
+              ),
+            );
+          }
         }
       default:
         {
