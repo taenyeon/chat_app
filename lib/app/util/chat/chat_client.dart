@@ -20,13 +20,25 @@ class ChatClient {
     log.info("[INIT] accessToken : $accessToken");
     if (accessToken != null && client == null) {
       client = await stompClient();
-      //client?.activate();
       client?.activate();
+    } else {
+      while (client == null) {
+        await Future.delayed(const Duration(milliseconds: 1000));
+
+        var accessToken = await tokenRepository.getAccessToken();
+        if (accessToken != null) {
+          client = await stompClient();
+          client?.activate();
+        } else {
+          log.info("ready to connect...");
+        }
+      }
     }
   }
 
   static Future<StompClient> stompClient() async {
     await Future.delayed(const Duration(milliseconds: 200));
+
     return StompClient(
       config: StompConfig.sockJS(
         url: 'http://localhost:8000/chat',
@@ -62,9 +74,8 @@ class ChatClient {
 
   static subscribe(StompFrame frame) {
     var chatController = Get.put(ChatController());
-    var baseController = Get.put(BaseController());
     log.info("[SUBSCRIBE] URL : /sub/chat/${frame.headers['user-name']}");
-    client?.subscribe(
+    client!.subscribe(
         destination: "/sub/chat/${frame.headers['user-name']}",
         callback: (res) {
           if (res.body != null) {
@@ -81,11 +92,12 @@ class ChatClient {
   }
 
   static reconnect() async {
-    client = await stompClient();
+    client!.deactivate();
+    init();
   }
 
   static send(ChatMessage message) async {
-    client?.send(
+    client!.send(
       destination: "/pub/chat/message",
       headers: {"access_token": await tokenRepository.getAccessToken()},
       body: jsonEncode(message.toJson()),
