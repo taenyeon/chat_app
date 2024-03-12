@@ -9,12 +9,9 @@ import 'package:easy_rich_text/easy_rich_text.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:logging/logging.dart';
+import 'package:http/http.dart' as http;
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
 class ChatBubble extends StatelessWidget {
   final ChatMessage message;
@@ -61,26 +58,7 @@ class ChatBubble extends StatelessWidget {
         mainAxisAlignment: mainAxisAlignment,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!isUser)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
-              child: Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: member.profileUrl != null
-                      ? Image.network(
-                          member.profileUrl!,
-                          fit: BoxFit.cover,
-                        )
-                      : Text(member.name.toUpperCase()[0]),
-                ),
-              ),
-            ),
+          if (!isUser) ChatProfile(member: member),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: bubbleAlignment,
@@ -98,7 +76,7 @@ class ChatBubble extends StatelessWidget {
                 child: buildPayload(message, url, context),
               ),
               if (url != null && url.isNotEmpty && message.type == 'TEXT')
-                buildLinkPreview(url),
+                ChatLinkPreview(isUser: isUser, url: url),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 5, 5, 8),
                 child: Text(
@@ -116,9 +94,19 @@ class ChatBubble extends StatelessWidget {
   Widget buildPayload(ChatMessage message, String? url, BuildContext context) {
     switch (message.type) {
       case "TEXT":
-        return buildTextMessage(message, url);
+        return ChatText(
+            messagePayloadTextStyle: messagePayloadTextStyle,
+            message: message,
+            url: url);
       case "FILE":
-        return buildFileMessage(message, context);
+        {
+          bool isImage = ValidateUtil.isImage(message.payload!);
+          if (isImage) {
+            return ChatImage(message: message);
+          } else {
+            return ChatFile(message: message);
+          }
+        }
       default:
         return buildDefaultMessage();
     }
@@ -129,8 +117,54 @@ class ChatBubble extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: 250),
     );
   }
+}
 
-  Padding buildTextMessage(ChatMessage message, String? url) {
+class ChatProfile extends StatelessWidget {
+  const ChatProfile({
+    super.key,
+    required this.member,
+  });
+
+  final Member member;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 4, 4, 4),
+      child: Container(
+        height: 30,
+        width: 30,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Center(
+          child: member.profileUrl != null
+              ? Image.network(
+                  member.profileUrl!,
+                  fit: BoxFit.cover,
+                )
+              : Text(member.name.toUpperCase()[0]),
+        ),
+      ),
+    );
+  }
+}
+
+class ChatText extends StatelessWidget {
+  const ChatText({
+    super.key,
+    required this.messagePayloadTextStyle,
+    required this.message,
+    required this.url,
+  });
+
+  final TextStyle messagePayloadTextStyle;
+  final ChatMessage message;
+  final String? url;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: ConstrainedBox(
@@ -145,7 +179,7 @@ class ChatBubble extends StatelessWidget {
                 targetString: url,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    launchUrl(Uri.parse(url));
+                    launchUrl(Uri.parse(url!));
                   },
                 prefixInlineSpan: const WidgetSpan(
                     child: Icon(
@@ -165,90 +199,68 @@ class ChatBubble extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget buildFileMessage(ChatMessage message, BuildContext context) {
-    bool isImage = ValidateUtil.isImage(message.payload!);
-    if (isImage) {
-      return buildImage(context, message);
-    } else {
-      return buildFile(message);
-    }
-  }
+class ChatFile extends StatelessWidget {
+  const ChatFile({
+    super.key,
+    required this.message,
+  });
 
-  Container buildFile(ChatMessage message) {
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(8.0),
         ),
       ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
-              color: Colors.white10,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () async => onTapFile(message),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.file_present_outlined,
-                      size: 50,
-                      color: Colors.white10,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 250),
-                        child: EasyRichText(
-                          message.payload!,
-                          defaultStyle: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      child: buildFileIcon(message),
     );
   }
 
-  ConstrainedBox buildImage(BuildContext context, ChatMessage message) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 250),
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return PhotoView(
-                  imageProvider: NetworkImage(message.payload!),
-                  initialScale: 1.0,
-                  maxScale: 3.0,
-                  backgroundDecoration: const BoxDecoration(
+  Align buildFileIcon(ChatMessage message) {
+    var fileName = message.payload!.split("/").last;
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            color: Colors.white10,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () async => onTapFile(message),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.file_present_outlined,
+                    size: 50,
                     color: Colors.white10,
                   ),
-                );
-              });
-        },
-        child: Container(
-          height: 250,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage(message.payload!)),
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 250),
+                      child: EasyRichText(
+                        fileName,
+                        defaultStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -267,23 +279,166 @@ class ChatBubble extends StatelessWidget {
       var file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
 
-      if (Platform.isWindows) {
-        Process.run('start', [filePath]);
-      } else if (Platform.isLinux) {
-        Process.run('xdg-open', [filePath]);
-      } else if (Platform.isMacOS) {
-        Process.run('open', [filePath]);
-      }
+      openFile(filePath);
     }
   }
 
-  Widget buildLinkPreview(String url) {
+  void openFile(String filePath) {
+    if (Platform.isWindows) {
+      Process.run('start', [filePath]);
+    } else if (Platform.isLinux) {
+      Process.run('xdg-open', [filePath]);
+    } else if (Platform.isMacOS) {
+      Process.run('open', [filePath]);
+    }
+  }
+}
+
+class ChatImage extends StatelessWidget {
+  const ChatImage({
+    super.key,
+    required this.message,
+  });
+
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 250),
+      child: GestureDetector(
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  color: Colors.black,
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: ChatPhotoViewer(message: message),
+                );
+              });
+        },
+        child: Container(
+          height: 250,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.contain, image: NetworkImage(message.payload!)),
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          ),
+          child: Image.network(
+            message.payload!,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) {
+                return child;
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChatPhotoViewer extends StatelessWidget {
+  const ChatPhotoViewer({
+    super.key,
+    required this.message,
+  });
+
+  final ChatMessage message;
+
+  @override
+  Widget build(BuildContext context) {
+    var photoViewController = PhotoViewController();
+    var minScale = PhotoViewComputedScale.contained * 0.5;
+    var maxScale = PhotoViewComputedScale.covered * 2;
+    var currentScale = PhotoViewComputedScale.contained * 0.5;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.grey,
+                )),
+          ],
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 500,
+            child: PhotoView(
+              imageProvider: NetworkImage(message.payload!),
+              minScale: minScale,
+              maxScale: maxScale,
+              initialScale: currentScale,
+              backgroundDecoration: const BoxDecoration(
+                color: Colors.white10,
+              ),
+              controller: photoViewController,
+            ),
+          ),
+        ),
+        Container(
+          height: 50,
+          color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    if (photoViewController.scale! < maxScale.multiplier) {
+                      photoViewController.scale =
+                          (photoViewController.scale! + 0.1);
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.zoom_in,
+                    color: Colors.limeAccent,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    if (photoViewController.scale! >= 0.1) {
+                      photoViewController.scale =
+                          (photoViewController.scale! - 0.1);
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.zoom_out,
+                    color: Colors.limeAccent,
+                  )),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class ChatLinkPreview extends StatelessWidget {
+  const ChatLinkPreview({
+    super.key,
+    required this.isUser,
+    required this.url,
+  });
+
+  final bool isUser;
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
     Alignment errorAlignment = Alignment.centerLeft;
     if (isUser) errorAlignment = Alignment.centerRight;
     return Padding(
-      padding: isUser
-          ? const EdgeInsets.fromLTRB(0, 5, 0, 0)
-          : const EdgeInsets.fromLTRB(0, 5, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
       child: SizedBox(
         width: 250,
         child: AnyLinkPreview(
@@ -325,9 +480,5 @@ class ChatBubble extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget test() {
-    return GestureDetector();
   }
 }

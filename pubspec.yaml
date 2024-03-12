@@ -23,13 +23,9 @@ dependencies:
   webview_flutter:
   desktop_webview_window:
   window_manager:
-  chat_bubbles:
-  flutter_chat_ui:
   file_picker:
   image_picker:
   open_filex:
-  uuid:
-  bubble:
   intl:
   any_link_preview:
   easy_rich_text:

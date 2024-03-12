@@ -1,14 +1,8 @@
-import 'package:chat_app/app/controller/base_controller.dart';
 import 'package:chat_app/app/controller/chat_controller.dart';
-import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/chat/model/chat_room.dart';
-import 'package:chat_app/app/ui/chat/chat_page_v2.dart';
 import 'package:chat_app/app/util/color/color_list.dart';
-import 'package:chat_bubbles/bubbles/bubble_normal.dart';
-import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logging/logging.dart';
 
 import 'chat_page_v3.dart';
 
@@ -17,7 +11,6 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ChatController chatController = Get.put(ChatController());
     return Padding(
       padding: const EdgeInsets.all(0),
       child: Container(
@@ -29,7 +22,7 @@ class ChatPage extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 300,
+              width: 250,
               child: Column(
                 children: [
                   SizedBox(
@@ -51,7 +44,7 @@ class ChatPage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(130, 0, 8, 0),
+                          padding: const EdgeInsets.fromLTRB(100, 0, 8, 0),
                           child: IconButton(
                             onPressed: () {
                               buildAddChatDialog(context);
@@ -103,21 +96,6 @@ class ChatPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  BubbleNormal buildMessage(
-      ChatMessage chatMessage, BaseController baseController) {
-    if (chatMessage.memberId == baseController.user.value.id) {
-      return BubbleNormal(
-        text: chatMessage.payload!,
-        isSender: true,
-      );
-    } else {
-      return BubbleNormal(
-        text: chatMessage.payload!,
-        isSender: false,
-      );
-    }
   }
 
   Future<dynamic> buildAddChatDialog(BuildContext context) {

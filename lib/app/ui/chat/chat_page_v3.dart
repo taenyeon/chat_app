@@ -4,7 +4,6 @@ import 'package:chat_app/app/controller/member_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/member/model/member.dart';
 import 'package:chat_app/app/ui/chat/chat_bubble.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -34,41 +33,8 @@ class ChatPageV3 extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: chatController.chatMessages.length,
                   itemBuilder: (context, index) {
-                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                      if (chatController.goBottom.isTrue) {
-                        chatController.goUnder();
-                        if (index + 1 == chatController.chatMessages.length) {
-                          chatController.goBottom.value = false;
-                        }
-                      }
-                    });
-
-                    ChatMessage chatMessage =
-                        chatController.chatMessages[index];
-
-                    bool isUser = false;
-
-                    var userId = userController.user.value.id;
-                    int memberId = chatMessage.memberId;
-
-                    Member member = memberController.memberMap[memberId]!;
-
-                    if (userId == memberId) isUser = true;
-
-                    if (index != 0 &&
-                        TimeUtil.dateFormatYYYYMMDD(chatController
-                                .chatMessages[index - 1].createdAt) ==
-                            TimeUtil.dateFormatYYYYMMDD(
-                                chatMessage.createdAt)) {
-                      return buildChatBubble(chatMessage, member, isUser);
-                    } else {
-                      return Column(
-                        children: [
-                          buildChatDateDivider(chatMessage),
-                          buildChatBubble(chatMessage, member, isUser),
-                        ],
-                      );
-                    }
+                    return buildChatMessages(chatController, index,
+                        userController, memberController);
                   },
                 ),
               ),
@@ -96,7 +62,7 @@ class ChatPageV3 extends StatelessWidget {
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                             ),
-                            maxLines: null,
+                            maxLines: 20,
                             expands: false,
                             focusNode: buildInputFocusNode(chatController),
                             onFieldSubmitted: (value) {
@@ -154,6 +120,43 @@ class ChatPageV3 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  buildChatMessages(ChatController chatController, int index,
+      BaseController userController, MemberController memberController) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (chatController.goBottom.isTrue) {
+        chatController.goUnder();
+        if (index + 1 == chatController.chatMessages.length) {
+          chatController.goBottom.value = false;
+        }
+      }
+    });
+
+    ChatMessage chatMessage = chatController.chatMessages[index];
+
+    bool isUser = false;
+
+    var userId = userController.user.value.id;
+    int memberId = chatMessage.memberId;
+
+    Member member = memberController.memberMap[memberId]!;
+
+    if (userId == memberId) isUser = true;
+
+    if (index != 0 &&
+        TimeUtil.dateFormatYYYYMMDD(
+                chatController.chatMessages[index - 1].createdAt) ==
+            TimeUtil.dateFormatYYYYMMDD(chatMessage.createdAt)) {
+      return buildChatBubble(chatMessage, member, isUser);
+    } else {
+      return Column(
+        children: [
+          buildChatDateDivider(chatMessage),
+          buildChatBubble(chatMessage, member, isUser),
+        ],
+      );
+    }
   }
 
   Stack buildChatDateDivider(ChatMessage chatMessage) {
