@@ -114,7 +114,8 @@ class ChatController extends GetxController {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: FileType.any);
 
-    chatMessageRepository.sendFile(selectedChatRoom.value.id, result!);
+    if (result != null)
+      chatMessageRepository.sendFile(selectedChatRoom.value.id, result);
   }
 
   void goUnder() {

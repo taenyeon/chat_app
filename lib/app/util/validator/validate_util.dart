@@ -7,7 +7,7 @@ class ValidateUtil {
   }
 
   static bool isImage(String raw) {
-    return RegExp(r'(?:(?:http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png|jpng))')
+    return RegExp(r'\.(jpg|jpeg|png|gif|bmp|webp)$', caseSensitive: false)
         .hasMatch(raw);
   }
 }
