@@ -54,10 +54,10 @@ class ChatController extends GetxController {
         if (chatRoom.id == id) {
           chatRoom.isSelected = true;
           selectedChatRoom.value = chatRoom;
-          chatRoom.backgroundColor = ColorList.none;
+          chatRoom.backgroundColor = ColorList.buttonColor;
         } else {
           chatRoom.isSelected = false;
-          chatRoom.backgroundColor = ColorList.buttonColor;
+          chatRoom.backgroundColor = ColorList.none;
         }
         chatRoomList[i] = chatRoom;
       }
@@ -77,14 +77,11 @@ class ChatController extends GetxController {
   }
 
   addMessage(ChatMessage chatMessage) {
-    log.info("addMessage");
     chatMessages.value = [...chatMessages, chatMessage];
     goBottom.value = true;
-    // goUnder();
   }
 
   addNotiMessage(ChatMessage chatMessage) {
-    log.info("addNotiMessage");
     notiMessages[chatMessage.roomId] = [
       ...?notiMessages[chatMessage.roomId],
       chatMessage,
@@ -94,9 +91,11 @@ class ChatController extends GetxController {
   void sendMessage() {
     var userController = Get.put(BaseController());
     var payload = messagePayloadController.text;
+
     if (payload == "") {
       return;
     }
+
     var message = ChatMessage.fromJson({
       "roomId": selectedChatRoom.value.id,
       "memberId": userController.user.value.id,
@@ -114,8 +113,9 @@ class ChatController extends GetxController {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: FileType.any);
 
-    if (result != null)
+    if (result != null) {
       chatMessageRepository.sendFile(selectedChatRoom.value.id, result);
+    }
   }
 
   void goUnder() {

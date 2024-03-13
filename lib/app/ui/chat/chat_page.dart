@@ -160,7 +160,7 @@ class ChatRoomListInterface extends StatelessWidget {
           physics: const PageScrollPhysics(),
           itemBuilder: (context, index) {
             ChatRoom chatRoom = chatController.chatRoomList[index];
-            return Container(
+            return SizedBox(
               width: 100,
               height: 60,
               child: TextButton(
@@ -218,8 +218,8 @@ class ChatRoomListInterface extends StatelessWidget {
                             child: Text(
                               chatController.notiMessages[chatRoom.id]!.length
                                   .toString(),
-                              style:
-                                  TextStyle(fontSize: 10, color: Colors.white),
+                              style: const TextStyle(
+                                  fontSize: 10, color: Colors.white),
                             ),
                           ),
                         );

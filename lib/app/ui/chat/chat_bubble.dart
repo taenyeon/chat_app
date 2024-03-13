@@ -139,9 +139,9 @@ class ChatProfile extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
-          child: member.profileUrl != null
+          child: member.imageUrl != null
               ? Image.network(
-                  member.profileUrl!,
+                  member.imageUrl!,
                   fit: BoxFit.cover,
                 )
               : Text(member.name.toUpperCase()[0]),
@@ -358,31 +358,33 @@ class ChatPhotoViewer extends StatelessWidget {
     var currentScale = PhotoViewComputedScale.contained * 0.5;
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.close,
-                  color: Colors.grey,
-                )),
-          ],
+        Container(
+          height: 50,
+          color: Colors.black,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.grey,
+                  )),
+            ],
+          ),
         ),
         Expanded(
-          child: SizedBox(
-            height: 500,
+          child: Center(
             child: PhotoView(
               imageProvider: NetworkImage(message.payload!),
               minScale: minScale,
               maxScale: maxScale,
               initialScale: currentScale,
-              backgroundDecoration: const BoxDecoration(
-                color: Colors.white10,
-              ),
+              backgroundDecoration: const BoxDecoration(),
               controller: photoViewController,
             ),
           ),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
-import 'package:chat_app/app/util/alert/snackbar_util.dart';
+import 'package:chat_app/app/util/notify/snackbar_util.dart';
 import 'package:chat_app/app/util/response/response.dart';
 import 'package:chat_app/app/data/token/model/token.dart';
 import 'package:chat_app/app/util/api/base_api.dart';

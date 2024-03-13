@@ -4,22 +4,27 @@ import 'package:chat_app/app/data/menu/model/MenuInfo.dart';
 import 'package:chat_app/app/ui/chat/chat_page.dart';
 import 'package:chat_app/app/ui/main/main_page.dart';
 import 'package:chat_app/app/ui/web/web_mac_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';
 
 import '../../controller/base_controller.dart';
+import '../../util/color/color_list.dart';
 
 class BasePage extends StatelessWidget {
   const BasePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var mainController = Get.put(BaseController());
-    var memberController = Get.put(MemberController());
+    Get.put(BaseController());
+    Get.put(MemberController());
+    var padding = const EdgeInsets.fromLTRB(0, 25, 0, 0);
+    if (kIsWeb) padding = const EdgeInsets.all(0);
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+        padding: padding,
         child: Row(
           children: [
             const MenuBar(),
@@ -116,9 +121,12 @@ class MenuBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
       child: SizedBox(
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         child: IconButton(
+          hoverColor: ColorList.none,
+          highlightColor: ColorList.none,
+          splashColor: ColorList.none,
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(Colors.limeAccent),
           ),
@@ -127,14 +135,14 @@ class MenuBar extends StatelessWidget {
           },
           icon: const Icon(
             Icons.rocket_launch,
+            size: 40,
             shadows: [
               Shadow(
                 color: Colors.lightBlue,
-                offset: Offset(3, 3),
+                offset: Offset(2, 2),
               ),
             ],
           ),
-          iconSize: 40,
         ),
       ),
     );
@@ -197,6 +205,7 @@ class MenuBar extends StatelessWidget {
                           ),
                           child: const Icon(
                             Icons.person,
+                            color: Colors.black26,
                             size: 25,
                           ),
                         ),

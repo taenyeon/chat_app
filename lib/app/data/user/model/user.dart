@@ -5,8 +5,9 @@ class User {
   late String phoneNumber;
   late String createdAt;
   late String updatedAt;
+  String? imageUrl;
 
-  User({id, username, name, phoneNumber, createdAt, updatedAt});
+  User({id, username, name, phoneNumber, createdAt, updatedAt, imageUrl});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -15,6 +16,7 @@ class User {
     phoneNumber = json['phoneNumber'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    imageUrl = json['imageUrl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -25,6 +27,7 @@ class User {
     data['phoneNumber'] = phoneNumber;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['imageUrl'] = imageUrl;
     return data;
   }
 }

@@ -4,6 +4,7 @@ import 'package:chat_app/app/controller/base_controller.dart';
 import 'package:chat_app/app/controller/chat_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/token/repository/token_repository.dart';
+import 'package:chat_app/app/util/notify/push_util.dart';
 import 'package:get/get.dart';
 import 'package:logging/logging.dart';
 import 'package:stomp_dart_client/stomp.dart';
@@ -86,6 +87,7 @@ class ChatClient {
               chatController.addMessage(chatMessage);
             } else {
               chatController.addNotiMessage(chatMessage);
+              PushUtil.sendLocalPush(chatMessage);
             }
           }
         });

@@ -86,7 +86,7 @@ class ChatPageV3 extends StatelessWidget {
                                     chatController.sendFile();
                                   },
                                   icon: const Icon(
-                                    Icons.file_open_outlined,
+                                    Icons.file_present_outlined,
                                     size: 20,
                                     color: Colors.grey,
                                   )),

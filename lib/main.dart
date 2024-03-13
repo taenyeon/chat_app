@@ -13,22 +13,23 @@ import 'package:window_manager/window_manager.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await localNotifier.setup(appName: "chat-app");
-  var localNotification = LocalNotification(
-    title: 'Hello',
-    subtitle: '!!!!!',
-    body: 'world',
-  );
-
-  localNotification.show();
-
   settingLogger();
+
+  await settingNotify();
 
   if (!kIsWeb) await settingDesktopMinSize();
 
   ChatClient.init();
 
   runApp(const MyApp());
+}
+
+Future<void> settingNotify() async {
+  if (!kIsWeb) {
+    if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+      await localNotifier.setup(appName: "chat-app");
+    }
+  }
 }
 
 void settingLogger() {
@@ -64,10 +65,24 @@ class MyApp extends StatelessWidget {
       defaultTransition: Transition.rightToLeft,
       title: 'Flutter Demo',
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xff1c1c1c).withOpacity(0.1),
         appBarTheme: const AppBarTheme(
           color: Colors.limeAccent,
         ),
         colorScheme: ThemeData().colorScheme.copyWith(
+              primary: Colors.limeAccent,
+              background: const Color(0xff1c1c1c).withOpacity(0.1),
+            ),
+        primarySwatch: Colors.lime,
+        primaryColor: Colors.limeAccent,
+        textTheme: TextTheme(),
+      ),
+      darkTheme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xff1c1c1c).withOpacity(0.1),
+        appBarTheme: const AppBarTheme(
+          color: Colors.limeAccent,
+        ),
+        colorScheme: ThemeData.dark().colorScheme.copyWith(
               primary: Colors.limeAccent,
               background: const Color(0xff1c1c1c).withOpacity(0.1),
             ),

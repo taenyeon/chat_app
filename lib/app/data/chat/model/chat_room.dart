@@ -1,14 +1,15 @@
 import 'dart:ui';
 
+import 'package:chat_app/app/util/color/color_list.dart';
 import 'package:flutter/material.dart';
 
 class ChatRoom {
-  late String id;
+  String id = "";
   String name = "";
   late int hostId;
 
   bool isSelected = false;
-  Color backgroundColor = Colors.white10;
+  Color backgroundColor = ColorList.none;
 
   ChatRoom({id, name, hostId});
 

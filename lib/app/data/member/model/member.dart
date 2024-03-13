@@ -5,7 +5,7 @@ class Member {
   late String phoneNumber;
   late String createdAt;
   late String updatedAt;
-  String? profileUrl;
+  String? imageUrl;
 
   Member({id, username, name, phoneNumber, createdAt, updatedAt});
 
@@ -16,6 +16,7 @@ class Member {
     phoneNumber = json['phoneNumber'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    imageUrl = json['imageUrl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,6 +27,7 @@ class Member {
     data['phoneNumber'] = phoneNumber;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['imageUrl'] = imageUrl;
     return data;
   }
 }
