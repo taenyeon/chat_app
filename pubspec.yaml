@@ -31,6 +31,7 @@ dependencies:
   easy_rich_text:
   url_launcher:
   photo_view:
+  local_notifier:
 
 dev_dependencies:
   flutter_test:

@@ -1,15 +1,26 @@
+import 'dart:io';
+
+import 'package:chat_app/app/route/route.dart';
 import 'package:chat_app/app/util/chat/chat_client.dart';
 import 'package:chat_app/app/util/log/logging_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:chat_app/app/route/route.dart';
+import 'package:local_notifier/local_notifier.dart';
 import 'package:logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
-import 'dart:io';
 
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await localNotifier.setup(appName: "chat-app");
+  var localNotification = LocalNotification(
+    title: 'Hello',
+    subtitle: '!!!!!',
+    body: 'world',
+  );
+
+  localNotification.show();
 
   settingLogger();
 
