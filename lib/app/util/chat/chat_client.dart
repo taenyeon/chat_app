@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:chat_app/app/controller/base_controller.dart';
 import 'package:chat_app/app/controller/chat_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_message.dart';
 import 'package:chat_app/app/data/token/repository/token_repository.dart';
@@ -18,7 +17,6 @@ class ChatClient {
 
   static init() async {
     var accessToken = await tokenRepository.getAccessToken();
-    log.info("[INIT] accessToken : $accessToken");
     if (accessToken != null && client == null) {
       client = await stompClient();
       client?.activate();
@@ -27,11 +25,10 @@ class ChatClient {
         await Future.delayed(const Duration(milliseconds: 1000));
 
         var accessToken = await tokenRepository.getAccessToken();
+
         if (accessToken != null) {
           client = await stompClient();
           client?.activate();
-        } else {
-          log.info("ready to connect...");
         }
       }
     }
@@ -58,10 +55,7 @@ class ChatClient {
     log.info("[DISCONNECT] USER : ${frame.headers['user-name']}");
   }
 
-  static Future<void> beforeConnect() async {
-    log.info("[TRY CONNECT] waiting to connect...");
-    await Future.delayed(const Duration(milliseconds: 200));
-  }
+  static Future<void> beforeConnect() async {}
 
   static void connect(StompFrame frame) {
     log.info("[CONNECT] USER : ${frame.headers['user-name']}");
@@ -70,7 +64,6 @@ class ChatClient {
 
   static onError(StompFrame frame) {
     log.info("[ERROR] ${frame.headers}");
-    reconnect();
   }
 
   static subscribe(StompFrame frame) {
@@ -91,11 +84,6 @@ class ChatClient {
             }
           }
         });
-  }
-
-  static reconnect() async {
-    client!.deactivate();
-    init();
   }
 
   static send(ChatMessage message) async {

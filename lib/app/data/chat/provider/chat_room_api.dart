@@ -1,13 +1,10 @@
-import 'dart:convert';
-
-import 'package:chat_app/app/data/chat/model/chat_message.dart';
+import 'package:chat_app/app/util/api/base_api.dart';
 import 'package:chat_app/app/util/notify/snackbar_util.dart';
 import 'package:chat_app/app/util/response/response.dart';
-import 'package:chat_app/app/data/token/model/token.dart';
-import 'package:chat_app/app/util/api/base_api.dart';
 import 'package:dio/src/dio.dart';
 import 'package:logging/logging.dart';
 
+import '../../member/model/member.dart';
 import '../model/chat_room.dart';
 
 class ChatRoomApi {
@@ -34,7 +31,10 @@ class ChatRoomApi {
     }
   }
 
-  addChatRoom() async {
+  addChatRoom(String roomName, List<Member> selectedMembers) async {
     var api = await getApi();
+    var selectedMemberIds = selectedMembers.map((e) => e.id);
+    var response = await api.post("",
+        data: {"roomName": roomName, "selectedMembers": selectedMemberIds});
   }
 }

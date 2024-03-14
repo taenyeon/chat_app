@@ -1,5 +1,7 @@
+import 'package:chat_app/app/controller/add_chat_room_controller.dart';
 import 'package:chat_app/app/controller/chat_controller.dart';
 import 'package:chat_app/app/data/chat/model/chat_room.dart';
+import 'package:chat_app/app/ui/chat/chat_bubble.dart';
 import 'package:chat_app/app/util/color/color_list.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,7 +49,7 @@ class ChatPage extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(100, 0, 8, 0),
                           child: IconButton(
                             onPressed: () {
-                              buildAddChatDialog(context);
+                              buildAddChatRoomDialog(context);
                             },
                             icon: const Icon(
                               Icons.add_box_outlined,
@@ -98,51 +100,226 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Future<dynamic> buildAddChatDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        barrierColor: Colors.white.withOpacity(0),
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: const SizedBox(
-              width: 500,
-              height: 500,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "Add ChatRoom",
+  Future<dynamic> buildAddChatRoomDialog(BuildContext context) {
+    return Get.dialog(const AddChatRoomDialog());
+  }
+}
+
+class AddChatRoomDialog extends StatelessWidget {
+  const AddChatRoomDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var addChatRoomController = Get.put(AddChatRoomController());
+
+    return AlertDialog(
+      content: SizedBox(
+        width: 500,
+        height: 500,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+              child: Text(
+                "Add ChatRoom",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  child: Text(
+                    "Room Name",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
+                ),
+                SizedBox(
+                  width: 300,
+                  height: 30,
+                  child: TextFormField(
+                    onFieldSubmitted: (value) {},
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    autofocus: true,
+                    controller: addChatRoomController.nameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: const BorderSide(
+                          color: Colors.limeAccent,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text(
+                "Members",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.close,
-                  color: Colors.redAccent,
+            Obx(
+              () => Container(
+                width: 500,
+                height: 100,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  color: Colors.white10,
+                ),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: addChatRoomController.selectedMembers.length,
+                  itemBuilder: (context, index) {
+                    var selectedMember =
+                        addChatRoomController.selectedMembers[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Center(
+                              child: selectedMember.imageUrl != null
+                                  ? Image.network(
+                                      selectedMember.imageUrl!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Text(selectedMember.name.toUpperCase()[0]),
+                            ),
+                          ),
+                          Text(
+                            selectedMember.name,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.create,
-                  color: Colors.blueAccent,
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              child: Text(
+                "Find Members",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ],
-            actionsOverflowAlignment: OverflowBarAlignment.center,
-            actionsOverflowDirection: VerticalDirection.down,
-            insetPadding: EdgeInsets.fromLTRB(0, 80, 0, 80),
-            backgroundColor: Colors.black45,
-          );
-        });
+            ),
+            Expanded(
+              child: Obx(
+                () => Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    color: Colors.white10,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: addChatRoomController.members.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var member = addChatRoomController.members[index];
+                        return SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: TextButton(
+                            onPressed: () {
+                              addChatRoomController.selectMember(index);
+                            },
+                            child: Row(
+                              children: [
+                                ChatProfile(
+                                  member: member,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: Text(
+                                    member.name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Get.back();
+            addChatRoomController.dispose();
+          },
+          icon: const Icon(
+            Icons.close,
+            color: Colors.redAccent,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            addChatRoomController.add();
+          },
+          icon: const Icon(
+            Icons.create,
+            color: Colors.blueAccent,
+          ),
+        ),
+      ],
+      actionsOverflowAlignment: OverflowBarAlignment.center,
+      actionsOverflowDirection: VerticalDirection.down,
+      insetPadding: EdgeInsets.fromLTRB(0, 80, 0, 80),
+      backgroundColor: Colors.black45,
+    );
   }
 }
 
