@@ -113,7 +113,6 @@ class AddChatRoomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var addChatRoomController = Get.put(AddChatRoomController());
-
     return AlertDialog(
       content: SizedBox(
         width: 500,
@@ -199,29 +198,48 @@ class AddChatRoomDialog extends StatelessWidget {
                         addChatRoomController.selectedMembers[index];
                     return Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Column(
+                      child: Stack(
                         children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: selectedMember.imageUrl != null
-                                  ? Image.network(
-                                      selectedMember.imageUrl!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Text(selectedMember.name.toUpperCase()[0]),
+                          TextButton(
+                            onPressed: () {
+                              addChatRoomController.unSelectMember(index);
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Center(
+                                    child: selectedMember.imageUrl != null
+                                        ? Image.network(
+                                            selectedMember.imageUrl!,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Text(selectedMember.name
+                                            .toUpperCase()[0]),
+                                  ),
+                                ),
+                                Text(
+                                  selectedMember.name,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Text(
-                            selectedMember.name,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
+                          const Positioned(
+                            top: 0,
+                            right: 10,
+                            child: Icon(
+                              Icons.cancel,
+                              color: Colors.redAccent,
+                              size: 20,
                             ),
                           ),
                         ],
@@ -265,20 +283,33 @@ class AddChatRoomDialog extends StatelessWidget {
                             onPressed: () {
                               addChatRoomController.selectMember(index);
                             },
-                            child: Row(
+                            child: Stack(
                               children: [
-                                ChatProfile(
-                                  member: member,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                  child: Text(
-                                    member.name,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
+                                Row(
+                                  children: [
+                                    ChatProfile(
+                                      member: member,
                                     ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                      child: Text(
+                                        member.name,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: Icon(
+                                    Icons.check_circle_outline,
+                                    color: Colors.blueAccent,
+                                    size: 20,
                                   ),
                                 ),
                               ],
