@@ -43,7 +43,7 @@ class BasePage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white10,
+            color: Colors.white.withOpacity(0.05),
           ),
           child: GetX<MenuButtonsController>(
             builder: (MenuButtonsController controller) {
@@ -80,7 +80,7 @@ class MenuBar extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.white10,
+            color: Colors.white.withOpacity(0.05),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),

@@ -140,9 +140,9 @@ class ChatPageV3 extends StatelessWidget {
     var userId = userController.user.value.id;
     int memberId = chatMessage.memberId;
 
-    Member member = memberController.memberMap[memberId]!;
-
     if (userId == memberId) isUser = true;
+
+    Member member = isUser ? Member() : memberController.memberMap[memberId]!;
 
     if (index != 0 &&
         TimeUtil.dateFormatYYYYMMDD(
@@ -161,26 +161,24 @@ class ChatPageV3 extends StatelessWidget {
 
   Stack buildChatDateDivider(ChatMessage chatMessage) {
     return Stack(alignment: Alignment.center, children: [
-      const Divider(
-        color: Colors.limeAccent,
-        thickness: 0.5,
-        indent: 10,
-        endIndent: 10,
-      ),
       Container(
+        height: 25,
+        width: 90,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: Colors.limeAccent,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Text(
-            TimeUtil.dateFormatYYYYMMDD(chatMessage.createdAt),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-              fontSize: 11,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              TimeUtil.dateFormatYYYYMMDD(chatMessage.createdAt),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontSize: 11,
+              ),
             ),
           ),
         ),

@@ -33,7 +33,7 @@ class ChatRoomApi {
 
   addChatRoom(String roomName, List<Member> selectedMembers) async {
     var api = await getApi();
-    var selectedMemberIds = selectedMembers.map((e) => e.id);
+    List<int> selectedMemberIds = selectedMembers.map((e) => e.id).toList();
     var response = await api.post("",
         data: {"roomName": roomName, "selectedMembers": selectedMemberIds});
   }

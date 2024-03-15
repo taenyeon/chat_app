@@ -23,6 +23,7 @@ class ChatController extends GetxController {
   Rx<ChatRoom> selectedChatRoom = ChatRoom().obs;
   RxList chatRoomList = [].obs;
   RxList chatMessages = [].obs;
+  RxInt chatRoomPage = 0.obs;
 
   RxMap<String, RxList<ChatMessage>> notiMessages =
       <String, RxList<ChatMessage>>{}.obs;
@@ -35,6 +36,9 @@ class ChatController extends GetxController {
   Future<void> onInit() async {
     log = Logger("chatRoomController");
     scrollController = ScrollController();
+
+    scrollController.addListener(isTop);
+
     chatRoomRepository = ChatRoomRepository();
     messagePayloadController = TextEditingController();
     chatMessageRepository = ChatMessageRepository();
@@ -62,6 +66,7 @@ class ChatController extends GetxController {
         chatRoomList[i] = chatRoom;
       }
       notiMessages[selected.value] = <ChatMessage>[].obs;
+      chatRoomPage.value = 0;
       await selectMessageByRoomId();
     }
   }
@@ -72,8 +77,9 @@ class ChatController extends GetxController {
 
   selectMessageByRoomId() async {
     var roomId = selectedChatRoom.value.id;
-    chatMessages.value =
-        await chatMessageRepository.getChatMessageByRoomId(roomId);
+    List<ChatMessage> list = await chatMessageRepository.getChatMessageByRoomId(
+        roomId, chatRoomPage.value);
+    chatMessages.value = [...list.reversed, ...chatMessages];
   }
 
   addMessage(ChatMessage chatMessage) {
@@ -121,5 +127,13 @@ class ChatController extends GetxController {
   void goUnder() {
     scrollController.animateTo(scrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 5), curve: Curves.easeInOutSine);
+  }
+
+  void isTop() async {
+    if (scrollController.offset == 0) {
+      chatRoomPage.value++;
+      await selectMessageByRoomId();
+      scrollController.jumpTo(scrollController.offset + 100);
+    }
   }
 }

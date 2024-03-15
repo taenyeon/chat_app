@@ -5,8 +5,9 @@ import 'package:file_picker/file_picker.dart';
 class ChatMessageRepository {
   final ChatMessageApi chatMessageApi = ChatMessageApi();
 
-  Future<List<ChatMessage>> getChatMessageByRoomId(String roomId) async =>
-      await chatMessageApi.getChatMessageByRoomId(roomId);
+  Future<List<ChatMessage>> getChatMessageByRoomId(
+          String roomId, int page) async =>
+      await chatMessageApi.getChatMessageByRoomId(roomId, page);
 
   sendFile(String roomId, FilePickerResult result) async =>
       await chatMessageApi.sendFile(roomId, result);

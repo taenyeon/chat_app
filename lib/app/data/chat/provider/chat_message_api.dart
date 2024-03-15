@@ -19,9 +19,13 @@ class ChatMessageApi {
     return api;
   }
 
-  Future<List<ChatMessage>> getChatMessageByRoomId(String roomId) async {
+  Future<List<ChatMessage>> getChatMessageByRoomId(
+      String roomId, int page) async {
     var api = await getApi();
-    var response = await api.get("/$roomId");
+    var response = await api.get(
+      "/$roomId",
+      queryParameters: {"currentPage": page, "searchSize": 5},
+    );
 
     var data = ResponseData.fromJson(response.data);
 
