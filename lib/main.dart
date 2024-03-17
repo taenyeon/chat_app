@@ -66,28 +66,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xff1c1c1c).withOpacity(0.1),
-        appBarTheme: const AppBarTheme(
-          color: Colors.limeAccent,
-        ),
+        appBarTheme: const AppBarTheme(),
         colorScheme: ThemeData().colorScheme.copyWith(
-              primary: Colors.limeAccent,
               background: const Color(0xff1c1c1c).withOpacity(0.1),
             ),
-        primarySwatch: Colors.lime,
-        primaryColor: Colors.limeAccent,
-        textTheme: TextTheme(),
-      ),
-      darkTheme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xff1c1c1c).withOpacity(0.1),
-        appBarTheme: const AppBarTheme(
-          color: Colors.limeAccent,
-        ),
-        colorScheme: ThemeData.dark().colorScheme.copyWith(
-              primary: Colors.limeAccent,
-              background: const Color(0xff1c1c1c).withOpacity(0.1),
-            ),
-        primarySwatch: Colors.lime,
-        primaryColor: Colors.limeAccent,
         textTheme: TextTheme(),
       ),
       initialRoute: '/',

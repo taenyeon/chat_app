@@ -66,6 +66,7 @@ class ChatController extends GetxController {
         chatRoomList[i] = chatRoom;
       }
       notiMessages[selected.value] = <ChatMessage>[].obs;
+      chatMessages.value = <ChatMessage>[];
       chatRoomPage.value = 0;
       await selectMessageByRoomId();
     }
@@ -133,7 +134,7 @@ class ChatController extends GetxController {
     if (scrollController.offset == 0) {
       chatRoomPage.value++;
       await selectMessageByRoomId();
-      scrollController.jumpTo(scrollController.offset + 100);
+      scrollController.jumpTo(scrollController.offset + 200);
     }
   }
 }

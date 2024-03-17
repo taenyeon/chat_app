@@ -3,6 +3,7 @@ import 'package:chat_app/app/controller/menu_controller.dart';
 import 'package:chat_app/app/data/menu/model/MenuInfo.dart';
 import 'package:chat_app/app/ui/chat/chat_page.dart';
 import 'package:chat_app/app/ui/main/main_page.dart';
+import 'package:chat_app/app/ui/main/profile_dialog.dart';
 import 'package:chat_app/app/ui/web/web_mac_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -181,6 +182,9 @@ class MenuBar extends StatelessWidget {
             switch (value) {
               case "Logout":
                 await mainController.logout();
+                break;
+              case "Profile":
+                await Get.dialog(const ProfileDialog());
                 break;
               default:
             }
