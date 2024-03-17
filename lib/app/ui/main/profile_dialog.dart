@@ -12,7 +12,8 @@ class ProfileDialog extends StatelessWidget {
     var baseController = Get.put(BaseController());
     var user = baseController.user.value;
     var modifyProfileController = Get.put(ModifyProfileController());
-
+    var emailController = TextEditingController();
+    emailController.text = user.username;
     modifyProfileController.nameController.text = user.name;
     modifyProfileController.phoneNumberController.text = user.phoneNumber;
 
@@ -30,39 +31,46 @@ class ProfileDialog extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const Padding(padding: EdgeInsets.all(10)),
+            Stack(
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  child: Text(
-                    "Email",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Text(
-                  user.username,
-                  style: const TextStyle(
+                Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
                     color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: Center(
+                    child: user.imageUrl != null
+                        ? Image.network(
+                            user.imageUrl!,
+                            fit: BoxFit.cover,
+                          )
+                        : Text(
+                            user.name.toUpperCase()[0],
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 30,
+                            ),
+                          ),
                   ),
                 ),
+                Positioned(child: child)
               ],
             ),
+            buildTextFormField("Email", emailController, false),
             const Padding(padding: EdgeInsets.all(5)),
             buildTextFormField(
               "Name",
               modifyProfileController.nameController,
+              true,
             ),
             const Padding(padding: EdgeInsets.all(5)),
             buildTextFormField(
               "PhoneNumber",
               modifyProfileController.phoneNumberController,
+              true,
             ),
           ],
         ),
@@ -92,7 +100,8 @@ class ProfileDialog extends StatelessWidget {
     );
   }
 
-  Row buildTextFormField(String title, TextEditingController controller) {
+  Row buildTextFormField(
+      String title, TextEditingController controller, bool isEnabled) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -109,25 +118,26 @@ class ProfileDialog extends StatelessWidget {
         ),
         SizedBox(
           width: 300,
-          height: 30,
-          child: TextFormField(
-            textAlign: TextAlign.start,
-            textAlignVertical: TextAlignVertical.top,
-            onFieldSubmitted: (value) {},
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-            autofocus: true,
-            controller: controller,
-            decoration: InputDecoration(
-              isCollapsed: true,
-              isDense: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Colors.limeAccent,
+          height: 40,
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: TextFormField(
+              enabled: isEnabled,
+              textAlign: TextAlign.start,
+              textAlignVertical: TextAlignVertical.top,
+              onFieldSubmitted: (value) {},
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+              controller: controller,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                  borderSide: const BorderSide(
+                    color: Colors.limeAccent,
+                  ),
                 ),
               ),
             ),
