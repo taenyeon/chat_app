@@ -56,7 +56,7 @@ class ProfileDialog extends StatelessWidget {
                           ),
                   ),
                 ),
-                Positioned(child: child)
+                Positioned(child: Container())
               ],
             ),
             buildTextFormField("Email", emailController, false),
